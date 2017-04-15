@@ -8,10 +8,11 @@
 requirejs.config({
     baseUrl: '/js/lib',
     paths: {
-        app: '../app',
-        jquery: 'jquery.min',
-        bootstrap: 'bootstrap.min',
-        io: '/socket.io/socket.io'
+      app: '../app',
+      jquery: 'jquery.min',
+      bootstrap: 'bootstrap.min',
+      mustache: 'mustache.min',
+      io: '/socket.io/socket.io'
     },
     shim: {
         "bootstrap": {

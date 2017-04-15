@@ -47,7 +47,7 @@
       <li class="media">
         <div class="media-left">
           <div class="media-object thumbnail text-center">
-            <a href="{{ back.src }}">
+            <a href="{{ back.src }}" title="Default: {{ desc_template }}">
               <img class="small" alt="Back" src="{{ back.src }}">
             </a>
             <div class="caption">{{ name }}</div>
@@ -58,7 +58,7 @@
             {{#cards}}
             <li>
               <div class="thumbnail text-center">
-                <a href="{{ src }}" title="{{ order }}">
+                <a href="{{ src }}" title="Order: {{ order }}">
                   <img alt="{{ desc }}" src="{{ src }}">
                 </a>
                 <div class="caption">

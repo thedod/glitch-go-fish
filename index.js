@@ -16,28 +16,44 @@ requirejs.config({
     nodeRequire: require
 });
 
-//
-var log_the_deck = requirejs(
+var test_stuff = requirejs(
   ['mustache', 'app/gofish'],
   function(Mustache, gofish) {
-    var deckspec = require(__dirname+'/public/deck.json');
-    var deck = new gofish.CardDeck(deckspec);
+    var deck = new gofish.CardDeck(
+      require(__dirname+'/public/deck.json'));
+    var hand = new gofish.CardHand(deck); // empty hand
+    var pile = new gofish.CardHand(deck, true);
+    pile.shuffle();
+    for (var i=0; i<4; i++)
+      hand.take(pile.give());
+    var fish = hand.ask('Ministry', 'Communications', true);
+    if (fish) pile.take(fish);
+    hand.sort();
+    
     console.log(
       Mustache.render(
         'Server listening at port {{port}}\n'+
-        '{{#deck.suits}}'+
+        'Suits:\n{{#pile.deck.suits}}'+
         '  * {{name}}\n'+
-        '{{#cards}}'+
-        '    * {{rank.name}}: {{desc}}\n'+
-        '{{/cards}}'+
-        '{{/deck.suits}}\n',
-        {port: port, deck: deck }
+        '{{/pile.deck.suits}}\n'+
+        'Ranks:\n{{#pile.deck.ranks}}'+
+        '  * {{name}} ({{desc_template}})\n'+
+        '{{/pile.deck.ranks}}\n'+
+        '{{#fish}}fish: {{.}}\n{{/fish}}'+
+        'hand:\n'+
+        '{{#hand.cards}}'+
+        '  {{desc}} (order: {{order}})\n'+
+        '{{/hand.cards}}',
+        {
+          port: port, pile: pile,
+          hand: hand, fish: fish
+        }
       )
     );
   }
 );
   
-server.listen(port,log_the_deck);
+server.listen(port, test_stuff);
 
 // Routing
 app.use(express.static('public'));

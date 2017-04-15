@@ -21,8 +21,8 @@
   <title>Go Fish card deck</title>
   <style type="text/css">
     .mustache { display: none }
-    #cards img { max-width:150px }
-    #cards img.small { max-width:75px }
+    #deck img { max-width:150px }
+    #deck img.suit-icon { max-width:75px }
   </style>
 </head>
 <body>
@@ -48,7 +48,7 @@
         <div class="media-left">
           <div class="media-object thumbnail text-center">
             <a href="{{ back.src }}" title="Default: {{ desc_template }}">
-              <img class="small" alt="Back" src="{{ back.src }}">
+              <img class="suit-icon" alt="Back" src="{{ back.src }}">
             </a>
             <div class="caption">{{ name }}</div>
           </div>

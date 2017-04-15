@@ -1,2 +1,7 @@
-# glitch-go-fish
-Socket.io multi player go fish game for glitch/node (work in progress)
+# Multiplayer "Go Fish"
+
+Work in progress, but there's a [deck](https://go-fish.glitch.me/cards.html) already :)
+
+----
+
+Based on [socketio-chat](https://glitch.com/~socketio-chat).

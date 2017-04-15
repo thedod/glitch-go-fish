@@ -1,0 +1,27 @@
+{
+	"name": "go-fish",
+	"version": "0.1.0",
+	"description": "Socket.io multiplayer game",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+	  "coffee-script": "*",
+    "express": "^4.12.4",
+    "requirejs": "*",
+    "socket.io": "*"
+	},
+	"engines": {
+		"node": "4.4.5"
+	},
+	"keywords": [
+		"node",
+		"express",
+    "socketio",
+		"chat",
+    "game",
+    "cards"
+	],
+	"license": "MIT"
+}

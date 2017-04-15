@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <link id="favicon" rel="icon" type="image/png"
+        href="https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fcards-by-last-dino.png?1491920375857">
+    <!-- Bootstrap core CSS -->
+    <link href="/css/lib/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/css/lib/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  <title>Go Fish card deck</title>
+  <style type="text/css">
+    .mustache { display: none }
+    #cards img { max-width:150px }
+    #cards img.small { max-width:75px }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1>
+        Go Fish <small>(work in progress)</small> card deck<br>
+        <small>
+          Based on the <a _target="_blank" href="https://en.wikipedia.org/wiki/Swiss_playing_cards">Swiss deck</a>
+          (<a _target="_blank" href="https://openclipart.org/detail/175474/swiss-card-deck-xvii">full deck</a>,        
+          <a target="_blank" href="/deck.json">json</a>).
+        </small>
+      </h1>
+    </div>
+    <div id="deck"></div>
+  </div><!-- /.container -->
+  
+  <!-- .mustache is display:none. Div is in the dom simply for the editor's hilites/indents ;) -->
+  <div class="mustache" id="deck-template">
+    <ul class="media-list">
+      {{#ranks}}
+      <li class="media">
+        <div class="media-left">
+          <div class="media-object thumbnail text-center">
+            <a href="{{ back.src }}">
+              <img class="small" alt="Back" src="{{ back.src }}">
+            </a>
+            <div class="caption">{{ name }}</div>
+          </div>
+        </div>
+        <div class="media-body">
+          <ul class="list-inline">
+            {{#cards}}
+            <li>
+              <div class="thumbnail text-center">
+                <a href="{{ src }}" title="{{ order }}">
+                  <img alt="{{ desc }}" src="{{ src }}">
+                </a>
+                <div class="caption">
+                  {{ desc }}
+                </div>
+              </div>
+            </li>
+            {{/cards}}
+        </ul>
+        </div>    
+      </li>
+      {{/ranks}}
+    </ul><!-- /.mustache -->
+  </div>
+  <script data-main="/js/show-deck" src="/js/lib/require.js"></script>
+</body>
+</html>

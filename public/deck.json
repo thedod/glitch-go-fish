@@ -1,0 +1,102 @@
+{
+  "back": {
+    "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fback.png?1492005238166"
+  },
+  "suits": [
+    {
+      "name": "Communications"
+    },
+    {
+      "name": "Defense"
+    },
+    {
+      "name": "Agriculture"
+    },
+    {
+      "name": "Finance"
+    }
+  ],
+  "ranks": [
+    {
+      "name": "Industry",
+      "desc_template": "{{suit}}",
+      "by_suit": {
+        "Communications": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIC.png?1492005237909"
+        },
+        "Defense": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FID.png?1492005241997"
+        },
+        "Agriculture": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIA.png?1492005236808"
+        },
+        "Finance": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIF.png?1492005236627"
+        }
+      }
+    },
+    {
+      "name": "Royalty",
+      "desc_template": "{{suit}} oligarch",
+      "by_suit": {
+        "Communications": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRC.png?1492005238463",
+          "desc": "Disruptor"
+        },
+        "Defense": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRD.png?1492005236449",
+          "desc": "Contractor"
+        },
+        "Agriculture": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRA.png?1492005237689",
+          "desc": "GMO Kingpin"
+        },
+        "Finance": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRF.png?1492005239486",
+          "desc": "Banker"
+        }
+      }
+    },
+    {
+      "name": "Ministry",
+      "desc_template": "Minister of {{suit}}",
+      "by_suit": {
+        "Communications": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMC.png?1492005240603",
+          "desc": "Yes Minister"
+        },
+        "Defense": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMD.png?1492005239160"
+        },
+        "Agriculture": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMA.png?1492005238767"
+        },
+        "Finance": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMF.png?1492005239833"
+        }
+      }
+    },
+    {
+      "name": "Peasantry",
+      "desc_template": "{{suit}} consumer",
+      "by_suit": {
+        "Communications": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPC.png?1492005242522",
+          "desc": "Pwned"
+        },
+        "Defense": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPD.png?1492005241026",
+          "desc": "Wounded"
+        },
+        "Agriculture": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPA.png?1492005240210",
+          "desc": "Malnourished"
+        },
+        "Finance": {
+          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPF.png?1492005241502",
+          "desc": "In debt"
+        }
+      }
+    }
+  ]
+}

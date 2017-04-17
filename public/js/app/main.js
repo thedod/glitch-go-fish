@@ -8,6 +8,7 @@ define(function (require) {
   // full IDs, like:
   var $ = require('jquery');
   var io = require('io');
+  var _bootstrap = require('bootstrap');
 
   $(function() {
     var FADE_TIME = 150; // ms
@@ -21,11 +22,12 @@ define(function (require) {
     // Initialize variables
     var $window = $(window);
     var $usernameInput = $('.usernameInput'); // Input for username
+    var $messagesDiv = $('#messages-div')
     var $messages = $('.messages'); // Messages area
     var $inputMessage = $('.inputMessage'); // Input message input box
 
-    var $loginPage = $('.login.page'); // The login page
-    var $chatPage = $('.chat.page'); // The chatroom page
+    var $loginModal = $('#login-modal'); // The login modal
+    var $chatPage = $('#chat-page'); // The chatroom page
 
     // Prompt for setting a username
     var username;
@@ -47,9 +49,7 @@ define(function (require) {
 
       // If the username is valid
       if (username) {
-        $loginPage.fadeOut();
-        $chatPage.show();
-        $loginPage.off('click');
+        $loginModal.modal('hide');
         $currentInput = $inputMessage.focus();
 
         // Tell the server your username
@@ -146,7 +146,11 @@ define(function (require) {
       } else {
         $messages.append($el);
       }
-      $messages[0].scrollTop = $messages[0].scrollHeight;
+
+      // Scroll to bottom
+      $messagesDiv.animate(
+        { scrollTop: $messagesDiv.prop("scrollHeight") - $messagesDiv.height() },
+        500);
     }
 
     // Prevents input from having injected markup
@@ -218,8 +222,8 @@ define(function (require) {
 
     // Click events
 
-    // Focus input when clicking anywhere on login page
-    $loginPage.click(function () {
+    // Focus input when clicking anywhere on login modal
+    $loginModal.click(function () {
       $currentInput.focus();
     });
 
@@ -243,13 +247,9 @@ define(function (require) {
 
     socket.on('username taken', function(data) {
       username = '';
-      $chatPage.fadeOut();
       $currentInput = $usernameInput.focus().val('')
         .attr('placeholder', 'Sorry, '+data.username+' is taken.');
-      $loginPage.click(function () {
-        $currentInput.focus();
-      });
-      $loginPage.fadeIn();
+      $loginModal.modal('show');
     });
 
     // Whenever the server emits 'new message', update the chat body
@@ -279,5 +279,12 @@ define(function (require) {
     socket.on('stop typing', function (data) {
       removeChatTyping(data);
     });
+
+    $loginModal.on('hidden.bs.modal', function (e) {
+      if (!username)
+        $loginModal.modal('show');
+    });
+    
+    $loginModal.modal('show');
   });
 });

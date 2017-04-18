@@ -50,7 +50,8 @@ define(function (require) {
       // If the username is valid
       if (username) {
         $loginModal.modal('hide');
-        $currentInput = $inputMessage.focus().val('');
+        $currentInput = $inputMessage.removeAttr('disabled')
+          .focus().val('').attr('placeholder','chat here...');
 
         // Tell the server your username
         socket.emit('join', username);

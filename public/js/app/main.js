@@ -50,7 +50,7 @@ define(function (require) {
       // If the username is valid
       if (username) {
         $loginModal.modal('hide');
-        $currentInput = $inputMessage.focus();
+        $currentInput = $inputMessage.focus().val('');
 
         // Tell the server your username
         socket.emit('join', username);
@@ -249,7 +249,6 @@ define(function (require) {
       username = '';
       $currentInput = $usernameInput.focus().val('')
         .attr('placeholder', 'Sorry, '+data.username+' is taken.');
-      $loginModal.modal('show');
     });
 
     // Whenever the server emits 'new message', update the chat body

@@ -250,6 +250,7 @@ define(function (require) {
       username = '';
       $currentInput = $usernameInput.focus().val('')
         .attr('placeholder', 'Sorry, '+data.username+' is taken.');
+      $loginModal.modal('show');
     });
 
     // Whenever the server emits 'new message', update the chat body

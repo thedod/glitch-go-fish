@@ -31,7 +31,6 @@ html,body {
 }
 
 /* Stuff based on original socket.io demo */
-span.username { margin-right: 0.1em }
 
 .chatArea {
 }
@@ -59,7 +58,7 @@ span.username { margin-right: 0.1em }
 .username {
   font-weight: 700;
   overflow: hidden;
-  padding-right: 15px;
+  padding: 0 0.5em;
 }
 
 .vcenter {

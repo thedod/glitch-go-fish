@@ -5,8 +5,7 @@
   "HTML Tidy for HTML5 for Linux version 5.5.14">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content=
-  "width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <!-- Bootstrap core CSS -->
   <link href="/css/lib/bootstrap.min.css" rel="stylesheet" type=
@@ -30,13 +29,19 @@
       <div class="chatArea col-xs-12 flex-col flex-grow">
         <div class="row flex-row flex-grow">
           <div id="messages-div" class=
-          "col-xs-12 flex-col flex-grow">
+          "col-md-9 col-xs-8 flex-col flex-grow">
             <ul class="messages list-unstyled">
               <li class="log" style="display: list-item;">
                 <a class="btn btn-success btn-xs" target="_blank"
                 href="cards.html">View card deck</a>
               </li>
             </ul>
+          </div>
+          <div id="game-div" class="col-md-3 col-xs-4 flex-col">
+            <h3>
+              Go Fish
+            </h3>
+            <ul id="user-list" class="list-group"></ul>
           </div>
         </div>
         <div class="row flex-row">
@@ -52,7 +57,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Login</h4>
+            <h4 class="modal-title">Welcome</h4>
           </div>
           <div class="modal-body">
             <div class="jumbotron text-center">

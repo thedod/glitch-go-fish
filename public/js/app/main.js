@@ -28,9 +28,12 @@ define(function (require) {
 
     var $loginModal = $('#login-modal'); // The login modal
     var $chatPage = $('#chat-page'); // The chatroom page
+    var $userList = $('#user-list');
 
     // Prompt for setting a username
-    var username;
+    var username = '';
+    var $usermap = {};
+    var typingmap = {};
     var connected = false;
     var typing = false;
     var lastTypingTime;
@@ -38,14 +41,38 @@ define(function (require) {
 
     var socket = io();
 
-    function addParticipantsMessage (data) {
-      var message = 'Users: '+data.users.join(', ');
-      log(message);
+    function updateUsers (data) {
+      $usermap = {};
+      data.users.forEach(function(user) {
+        $usermap[user] = $('<li/>')
+          .addClass('list-group-item');
+        updateUser(user);
+      });
+      $userList.empty();
+      for (var u in $usermap) {
+        $userList.append($usermap[u]);
+      }
+    }
+
+    function updateUser(user) {
+      var $user = $usermap[user];
+      if (!$user) return;
+      $user.text(user);
+      if (user===username) {
+        $user.append(
+          $('<span/>').addClass('badge').text('me')
+        )
+      }
+      if (typingmap[user]) {
+        $user.append(
+          $('<span/>').addClass('badge').text('typing')
+        );
+      };
     }
 
     // Sets the client's username
     function setUsername () {
-      username = cleanInput($usernameInput.val().trim());
+      username = cleanInput($usernameInput.val().trim().toLowerCase());
 
       // If the username is valid
       if (username) {
@@ -107,16 +134,14 @@ define(function (require) {
 
     // Adds the visual chat typing message
     function addChatTyping (data) {
-      data.typing = true;
-      data.message = 'is typing';
-      addChatMessage(data);
+      typingmap[data.username] = true;
+     updateUser(data.username);
     }
 
     // Removes the visual chat typing message
     function removeChatTyping (data) {
-      getTypingMessages(data).fadeOut(function () {
-        $(this).remove();
-      });
+      typingmap[data.username] = false;
+      updateUser(data.username);
     }
 
     // Adds a message element to the messages and scrolls to the bottom
@@ -243,7 +268,7 @@ define(function (require) {
       log(message, {
         prepend: true
       });
-      addParticipantsMessage(data);
+      updateUsers(data);
     });
 
     socket.on('username taken', function(data) {
@@ -261,13 +286,13 @@ define(function (require) {
     // Whenever the server emits 'user joined', log it in the chat body
     socket.on('user joined', function (data) {
       log(data.username + ' joined');
-      addParticipantsMessage(data);
+      updateUsers(data);
     });
 
     // Whenever the server emits 'user left', log it in the chat body
     socket.on('user left', function (data) {
       log(data.username + ' left');
-      addParticipantsMessage(data);
+      updateUsers(data);
       removeChatTyping(data);
     });
 

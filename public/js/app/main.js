@@ -60,12 +60,16 @@ define(function (require) {
       $user.text(user);
       if (user===username) {
         $user.append(
-          $('<span/>').addClass('badge').html('&#66000;')
+          $('<span/>').addClass('badge').html(
+            '<span class="glyphicon glyphicon-user" aria-hidden="true"></span>'
+          )
         )
       }
       if (typingmap[user]) {
         $user.append(
-          $('<span/>').addClass('badge').html('&#9998;')
+          $('<span/>').addClass('badge').html(
+            '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>'
+          )
         );
       };
     }

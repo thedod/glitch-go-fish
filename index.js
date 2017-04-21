@@ -30,6 +30,10 @@ requirejs([ "mustache", "app/gofish" ],
     socket.hand = new gofish.CardHand(deck);
     socket.on("join", function(username) {
       if (socket.joined) return;
+      username = Mustache.render(
+        "{{sanitize_me}}",
+        {sanitize_me: username.trim()});
+      if (!username) return;
       if (game.users.indexOf(username) >= 0) {
         socket.emit("username taken", {
           username: username
@@ -67,13 +71,13 @@ requirejs([ "mustache", "app/gofish" ],
         socket.user.hand_size = socket.hand.cards.length;
         socket.emit("status", {
           message: Mustache.render(
-            "You draws {{n}} cards",
+            "You draw {{n}} cards",
             {n: num_suits}),
           game: game
         });
         socket.broadcast.emit("status", {
           message: Mustache.render(
-            "{{user}} draws {{n}} cards",
+            "{{{user}}} draws {{n}} cards",
             {user: socket.username, n: num_suits}),
           game: game
         });

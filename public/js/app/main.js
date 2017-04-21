@@ -176,8 +176,9 @@ define(function(require) {
       socket.hand = new gofish.CardHand(socket.deck);
     });
     socket.on("joined", function(data) {
+      username = data.username;
       connected = true;
-      var message = "Welcome, " + data.username;
+      var message = "Welcome, "+data.username;
       log(message, {
         prepend: true
       });

@@ -102,9 +102,12 @@
   
   <div id="user-template" class="mustache">
     {{#me}}
-      <span class="glyphicon glyphicon-user" aria-hidden="true"></span>      
+      <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
     {{/me}}
     {{{ user.name }}}
+    {{#user.playing}}
+      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+    {{/user.playing}}
     {{#user.ranks}}
       <div class="badge">{{ symbol }}</div>
     {{/user.ranks}}

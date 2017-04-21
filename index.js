@@ -22,7 +22,8 @@ requirejs([ "mustache", "app/gofish" ],
   pile.shuffle();
   var game = {
     pile_size: pile.cards.length,
-    users: []
+    turn: null, // it's users[turn]'s turn (unless null)
+    users: [],
   };
 
   io.on("connection", function(socket) {
@@ -31,7 +32,29 @@ requirejs([ "mustache", "app/gofish" ],
     socket.sanitize = function(s) {
       return Mustache.render(
         "{{s}}", {s: s});
-    }
+    };
+    // we don't define these game helpers as methods of game,
+    // so that we can emit/serialize it.
+    socket.update_game = function() {
+      game.pile_size = pile.cards.length
+    };
+    socket.next_turn = function() {
+      if (game.users.length<=1) {
+          game.turn = null;
+      } else {
+        if (game.turn===null) {
+          game.turn = 0;
+        } else {
+          game.turn = (game.turn+1)%game.user.length;
+        }
+        var message = game.users[game.turn].name+"'s turn";
+        socket.emit(
+          "status", { message: message, game: game });
+        socket.broadcast.emit(
+          "status", { message: message, game: game });
+      }
+    };
+
     socket.on("join", function(username) {
       if (socket.joined) return;
       username = socket.sanitize(username.trim());
@@ -69,7 +92,7 @@ requirejs([ "mustache", "app/gofish" ],
             suit: card.suit
           })
         });
-        game.pile_size = pile.cards.length;
+        socket.update_game();
         socket.user.hand_size = socket.hand.cards.length;
         socket.emit("status", {
           message: Mustache.render(
@@ -83,6 +106,10 @@ requirejs([ "mustache", "app/gofish" ],
             {user: socket.username, n: num_suits}),
           game: game
         });
+        if (game.users.length>1 && game.turn===null) {
+          // game can start
+          socket.next_turn();
+        };
       } else {
         socket.emit("status", {
           message: "Not enough cards in the pile for you &#128542;",
@@ -118,17 +145,20 @@ requirejs([ "mustache", "app/gofish" ],
         var i = game.users.indexOf(socket.user);
         if (i >= 0) {
           game.users.splice(i, 1);
+          if (i===game.turn || game.users.length==1) {
+            socket.next_turn();
+          }
         }
         socket.hand.cards.forEach(function(card) {
           pile.take(card);
         });
         socket.user.ranks.forEach(function(r) {
           deck.getRank(r).cards.forEach(function(card) {
-            pile.take(card);            
+            pile.take(card);         
           });
         });
         pile.shuffle();
-        game.pile_size = pile.cards.length;
+        socket.update_game();
                     
         socket.broadcast.emit("user left", {
           username: socket.username,

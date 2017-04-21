@@ -21,6 +21,7 @@ define(function(require) {
     var userTemplate = $("#user-template").html();
     var username = "";
     var users = [];
+    var turn = null;
     var $usermap = {};
     var typingmap = {};
     var connected = false;
@@ -36,10 +37,15 @@ define(function(require) {
       if (data) {
         users = data.game.users;
         $('#pile-size').text(data.game.pile_size);
+        if (data.game.turn!==null) {
+          users[data.game.turn].playing = true;
+          console.log(users[data.game.turn])
+        }
       }
       $usermap = {};
       users.forEach(function(user) {
-        $usermap[user.name] = $("<li/>").addClass("list-group-item").data("user", user);
+        $usermap[user.name] = $("<li/>")
+          .addClass("list-group-item").data("user", user);
         updateUser(user.name);
       });
       $userList.empty();
@@ -56,7 +62,7 @@ define(function(require) {
       $user.html(Mustache.render(userTemplate, {
         user: $user.data("user"),
         typing: typingmap[user_name],
-        me: user_name === username
+        me: user_name === username,
       }));
     }
     function setUsername() {
@@ -72,10 +78,8 @@ define(function(require) {
       if (message && connected) {
         $inputMessage.val("");
         addChatMessage(
-          {
-            username: username,
-            message: message
-          },
+          // Didn't come from server, so we're not re-sanitizing (&amp;-ing)
+          { username: username, message: message },
           { sanitize: true }
         );
         socket.emit("new message", message);

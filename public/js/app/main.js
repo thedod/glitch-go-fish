@@ -19,6 +19,7 @@ define(function(require) {
     var $userList = $("#user-list");
     var cardTemplate = $("#card-template").html();
     var userTemplate = $("#user-template").html();
+    var playTemplate = $("#play-template").html();
     var username = "";
     var users = [];
     var turn = null;
@@ -36,10 +37,19 @@ define(function(require) {
     function updateGame(data) {
       if (data) {
         users = data.game.users;
+        $('#play-control').empty();
         $('#pile-size').text(data.game.pile_size);
         if (data.game.turn!==null) {
-          users[data.game.turn].playing = true;
-          console.log(users[data.game.turn])
+          var user = users[data.game.turn];
+          user.playing = true;
+          if (user.name===username) {
+            $('#play-controls').html(Mustache.render(
+              playTemplate,{
+                users: data.game.users,
+                ranks: socket.deck.ranks,
+                suits: socket.deck.suits }
+            ))
+          }
         }
       }
       $usermap = {};
@@ -176,9 +186,9 @@ define(function(require) {
       updateTyping();
     });
     $loginModal.click(function() {
-      $currentInput.focus();
+      $currentInput.focus().select();
     });
-    $inputMessage.click(function() {
+    $('#chat-area').click(function() {
       $inputMessage.focus();
     });
     socket.on("connect", function() {

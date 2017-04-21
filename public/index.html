@@ -9,7 +9,7 @@
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   
   <!-- Bootstrap CSS has to come from a CDN (only way to have the ../fonts assets at glitch) -->
-  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/slate/bootstrap.min.css"
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/united/bootstrap.min.css"
         rel="stylesheet" type="text/css">
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <link href="/css/lib/ie10-viewport-bug-workaround.css" rel=
@@ -47,12 +47,13 @@
                 <span id="pile-size"></span>
               </span>
             </h3>
-           <ul id="user-list" class="list-group"></ul>
+            <ul id="user-list" class="list-group"></ul>
+            <div id="play-controls"></div>
           </div>
         </div>
         <div class="row flex-row">
           <div class="inputMessageDiv col-xs-12 flex-col">
-            <input class="form-control inputMessage" placeholder=
+            <input class="form-control inputMessage bg-primary" placeholder=
             "Please wait..." disabled>
           </div>
         </div>
@@ -63,14 +64,15 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Welcome</h4>
+            <h4 class="modal-title">Welcome to Go Fish <small>work in progress</small></h4>
           </div>
           <div class="modal-body">
             <div class="jumbotron text-center">
-              <p>[No game yet (only chat), but]</p>
-              <h3>What's your nickname?</h3><input type="text"
-              class="usernameInput" id="username" placeholder=
-              "Type your name...">
+              <div class="page-header">
+                <h1>What's your nickname?</h1>
+                <input type="text" class="usernameInput"
+                       id="username" placeholder="Type your name..."/>
+              </div>
             </div>
           </div>
         </div><!-- /.modal-content -->
@@ -81,17 +83,20 @@
     <div class="col-md-1 flex-col">
       <div id="{{ rank }}-of-{{ suit }}-modal" class="modal fade card-modal"
            tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})</h4>
-          </div>
-          <div class="modal-body text-center">
-            <img class="img-responsive img-center img-thumbnail" src="{{ src }}" alt="{{ desc }}" />
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})</h4>
+            </div>
+            <div class="modal-body text-center">
+              <img class="img-responsive img-center img-thumbnail" src="{{ src }}" alt="{{ desc }}" />
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
 
       <button type="button" class="btn btn-default card-button" data-toggle="modal"
               data-target="#{{ rank }}-of-{{ suit }}-modal">
@@ -113,13 +118,55 @@
     {{/user.ranks}}
     <div class="badge">
       <span class="glyphicon glyphicon-duplicate" aria-hidden="true"/>
-      {{user.hand_size}}
+      <span>{{user.hand_size}}</span>
     </div>
     {{#typing}}
       <div class="badge">
         <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
       </div>
     {{/typing}}
+  </div>
+  
+  <div id="play-template" class="mustache">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Your turn:</h3>
+      </div>
+      <div class="panel-body text-center">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="#who">ask</label>
+            <select id="who">
+              <option value=""></option>
+              {{#users}}
+                {{^playing}}
+                  <option value="{{name}}">{{name}}</option>
+                {{/playing}}
+              {{/users}}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="#rank">for</label>
+            <select id="rank">
+              <option value=""></option>
+              {{#ranks}}
+                <option value="{{name}}">{{{symbol}}} {{name}}</option>
+              {{/ranks}}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="#suit">of</label>
+            <select id="suit">
+              <option value=""></option>
+              {{#suits}}
+                <option value="{{name}}">{{{symbol}}} {{name}}</option>
+              {{/suits}}
+            </select>
+          </div>
+          <button id="play-button" class="btn btn-default" disabled>Play</button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script data-main="/js/main" src="/js/lib/require.js"></script>

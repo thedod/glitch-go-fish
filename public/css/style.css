@@ -36,6 +36,20 @@ html,body {
 
 /* Stuff based on original socket.io demo */
 
+.usernameInput {
+  background-color: transparent;
+  border: none;
+  border-bottom: 0.1em solid black;
+  outline: none;
+  padding-bottom: 1em;
+  text-align: center;
+  width: 100%;
+  font-size: 120%;
+  color: black;
+  font-weight: 100;
+}
+
+
 .chatArea {
 }
     

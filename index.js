@@ -57,12 +57,15 @@ requirejs([ "mustache", "app/gofish" ],
 
     socket.on("join", function(username) {
       if (socket.joined) return;
-      username = socket.sanitize(username.trim());
+      username = socket.sanitize(username.trim().toLowerCase());
       if (!username) return;
-      if (game.users.indexOf(username) >= 0) {
-        socket.emit("username taken", {
-          username: username
-        });
+      if (
+        game.users.find(
+          function (user) { return user.name===username; }
+        ))
+      {
+        socket.emit(
+          "username taken", { username: username });
         return;
       }
 

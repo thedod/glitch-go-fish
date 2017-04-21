@@ -4,21 +4,26 @@
   },
   "suits": [
     {
-      "name": "Communications"
+      "name": "Communications",
+      "symbol": "&#128498;"
     },
     {
-      "name": "Defense"
+      "name": "Defense",
+      "symbol": "&#9960;"
     },
     {
-      "name": "Agriculture"
+      "name": "Agriculture",
+      "symbol": "&#9880;"
     },
     {
-      "name": "Finance"
+      "name": "Finance",
+      "symbol": "&#128176;"
     }
   ],
   "ranks": [
     {
       "name": "Industry",
+      "symbol": "&#9881;",
       "desc_template": "{{suit}}",
       "by_suit": {
         "Communications": {
@@ -37,6 +42,7 @@
     },
     {
       "name": "Royalty",
+      "symbol": "&#128081;",
       "desc_template": "{{suit}} oligarch",
       "by_suit": {
         "Communications": {
@@ -59,6 +65,7 @@
     },
     {
       "name": "Ministry",
+      "symbol": "&#127963;",
       "desc_template": "Minister of {{suit}}",
       "by_suit": {
         "Communications": {
@@ -78,11 +85,12 @@
     },
     {
       "name": "Peasantry",
+      "symbol": "&#128106;",
       "desc_template": "{{suit}} consumer",
       "by_suit": {
         "Communications": {
           "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPC.png?1492005242522",
-          "desc": "Pwned"
+          "desc": "Hacked"
         },
         "Defense": {
           "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPD.png?1492005241026",

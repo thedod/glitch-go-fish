@@ -1,3 +1,7 @@
+.mustache { display: none; }
+.img-center { margin: 0 auto }
+.img-small {max-height: 50%}
+
 /* flex styles based on http://www.bootply.com/oWBElgjtTn */
 html,body {
 	height:100%;
@@ -36,7 +40,7 @@ html,body {
 }
     
 #messages-div {
-  font-size: 150%;
+  font-size: 110%;
   overflow-y: scroll;
   background: black;
 }

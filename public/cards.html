@@ -54,15 +54,16 @@
           </div>
         </div>
         <div class="media-body">
-          <ul class="list-inline">
+          <ul class="list-group">
             {{#cards}}
-            <li>
-              <div class="thumbnail text-center">
+            <li class="list-group-item">
+              <div id="{{ rank }}-of-{{ suit }}"
+                   class="thumbnail text-center">
                 <a href="{{ src }}" title="Order: {{ order }}">
                   <img alt="{{ desc }}" src="{{ src }}">
                 </a>
                 <div class="caption">
-                  {{ desc }}
+                  {{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})
                 </div>
               </div>
             </li>

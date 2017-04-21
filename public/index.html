@@ -27,20 +27,27 @@
 <body>
   <div class="container">
     <div id="chat-page" class="row flex-row flex-grow">
-      <div class="chatArea col-xs-12 flex-col flex-grow">
+      <div id="chat-area" class="col-xs-12 flex-col flex-grow">
+        <div class="panel panel-default">
+          <div class="panel-body text-center">
+            <div id="cards-div" class="row flex-row"></div>            
+          </div>
+        </div>
         <div class="row flex-row flex-grow">
           <div id="messages-div" class=
-          "col-md-9 col-xs-8 flex-col flex-grow">
+          "col-xs-6 flex-col flex-grow">
             <ul class="messages list-unstyled">
             </ul>
           </div>
-          <div id="game-div" class="col-md-3 col-xs-4 flex-col">
+          <div id="game-div" class="col-xs-6 flex-col">
             <h3>
               Go Fish
-              <a class="btn btn-success btn-xs" target="_blank"
-                 href="cards.html">View card deck</a>
+              <span class="badge pull-right">
+                <span class="glyphicon glyphicon-duplicate"></span>
+                <span id="pile-size"></span>
+              </span>
             </h3>
-            <ul id="user-list" class="list-group"></ul>
+           <ul id="user-list" class="list-group"></ul>
           </div>
         </div>
         <div class="row flex-row">
@@ -63,13 +70,55 @@
               <p>[No game yet (only chat), but]</p>
               <h3>What's your nickname?</h3><input type="text"
               class="usernameInput" id="username" placeholder=
-              "JaneDoe">
+              "Type your name...">
             </div>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
   </div><!-- /.container -->
+  <div id="card-template" class="mustache">
+    <div class="col-md-1 flex-col">
+      <div id="{{ rank }}-of-{{ suit }}-modal" class="modal fade card-modal"
+           tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})</h4>
+          </div>
+          <div class="modal-body text-center">
+            <img class="img-responsive img-center img-thumbnail" src="{{ src }}" alt="{{ desc }}" />
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+      <button type="button" class="btn btn-default card-button" data-toggle="modal"
+              data-target="#{{ rank }}-of-{{ suit }}-modal">
+        <img class="img-responsive" src="{{ src }}" alt="{{ desc }}" />
+      </button>
+    </div>
+  </div>
+  
+  <div id="user-template" class="mustache">
+    {{#me}}
+      <span class="glyphicon glyphicon-user" aria-hidden="true"></span>      
+    {{/me}}
+    {{ user.name }}
+    {{#user.ranks}}
+      <div class="badge">{{ symbol }}</div>
+    {{/user.ranks}}
+    <div class="badge">
+      <span class="glyphicon glyphicon-duplicate" aria-hidden="true"/>
+      {{user.hand_size}}
+    </div>
+    {{#typing}}
+      <div class="badge">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
+      </div>
+    {{/typing}}
+  </div>
+
   <script data-main="/js/main" src="/js/lib/require.js"></script>
 </body>
 </html>

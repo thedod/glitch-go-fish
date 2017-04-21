@@ -14,17 +14,21 @@ define(function () {
       suit.order = this.suits.length-(s+1);
       suit.cards = [];
       suit.by_rank = {};
+      if (!suit.symbol) suit.symbol = suit.name[0];
     }
     for (var r=0; r<this.ranks.length; r++) {
       var rank = this.ranks[r];
       this.rank_by_name[rank.name] = rank;
       rank.order = this.ranks.length-(r+1);
       rank.cards = [];
+      if (!rank.symbol) rank.symbol = rank.name[0];
       for (var s=0 ; s<this.suits.length; s++) {
         var suit = this.suits[s];
         var card = rank.by_suit[suit.name];
         card.rank = rank.name;
         card.suit = suit.name;
+        card.suit_symbol = suit.symbol;
+        card.rank_symbol = rank.symbol;
         card.order = suit.order+this.suits.length*rank.order;
         if (!card.desc) {
           card.desc = Mustache.render(rank.desc_template, {'suit': suit.name });

@@ -1,132 +1,145 @@
-// Setup basic express server
-var express = require('express');
+var express = require("express");
 var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
+var server = require("http").createServer(app);
+var io = require("socket.io")(server);
 
-var requirejs = require('requirejs');
-
+var requirejs = require("requirejs");
 requirejs.config({
-    baseUrl: 'public/js/lib',
-    paths: {
-        app: '../app',
-        mustache: 'mustache.min'
-    },
-    nodeRequire: require
+  baseUrl: "public/js/lib",
+  paths: {
+    app: "../app",
+    mustache: "mustache.min"
+  },
+  nodeRequire: require
 });
 
-var test_stuff = requirejs(
-  ['mustache', 'app/gofish'],
-  function(Mustache, gofish) {
-    var deck = new gofish.CardDeck(
-      require(__dirname+'/public/deck.json'));
-    var hand = new gofish.CardHand(deck); // empty hand
-    var pile = new gofish.CardHand(deck, true);
-    pile.shuffle();
-    for (var i=0; i<4; i++)
-      hand.take(pile.give());
-    var fish = hand.ask('Ministry', 'Communications', true);
-    if (fish) pile.take(fish);
-    hand.sort();
-    
-    console.log(
-      Mustache.render(
-        'Server listening at port {{port}}\n'+
-        'Suits:\n{{#pile.deck.suits}}'+
-        '  * {{name}}\n'+
-        '{{/pile.deck.suits}}\n'+
-        'Ranks:\n{{#pile.deck.ranks}}'+
-        '  * {{name}} ({{desc_template}})\n'+
-        '{{/pile.deck.ranks}}\n'+
-        '{{#fish}}fish: {{.}}\n{{/fish}}'+
-        'hand:\n'+
-        '{{#hand.cards}}'+
-        '  {{desc}} (order: {{order}})\n'+
-        '{{/hand.cards}}',
-        {
-          port: port, pile: pile,
-          hand: hand, fish: fish
-        }
-      )
-    );
-  }
-);
-  
-server.listen(port, test_stuff);
+requirejs([ "mustache", "app/gofish" ],
+          function(Mustache, gofish) {
+  var port = process.env.PORT || 3e3;
+  var deck = new gofish.CardDeck(require(__dirname + "/public/deck.json"));
+  var num_suits = deck.suits.length;
+  var pile = new gofish.CardHand(deck, true);
+  pile.shuffle();
+  var game = {
+    pile_size: pile.cards.length,
+    users: []
+  };
 
-// Routing
-app.use(express.static('public'));
-
-// Chatroom
-var game = {
-  users:[]
-};
-io.on('connection', function (socket) {
-  socket.joined = false;
-  socket.game = game;
-
-  // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
-    // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
-    });
-  });
-
-  // when the client emits 'join', this listens and executes
-  socket.on('join', function (username) {
-    if (socket.joined) return;
-    if (socket.game.users.indexOf(username)>=0) {
-      socket.emit('username taken', {
-        username: username
-      });
-      return;
-    }
-    // we store the username in the socket session for this client
-    socket.username = username;
-    socket.game.users.push(username);
-    socket.joined = true;
-    socket.emit('joined', {
-      username: username,
-      users: socket.game.users
-    });
-    // echo globally (all clients) that a person has connected
-    socket.broadcast.emit('user joined', {
-      username: socket.username,
-      users: socket.game.users
-    });
-  });
-
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.emit('typing', {
-      username: socket.username
-    });
-  });
-
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
-    });
-  });
-
-  // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-    if (socket.joined) {
-      // remove self from users
-      var i=socket.game.users.indexOf(socket.username);
-      if (i>=0) {
-        socket.game.users.splice(i,1);
+  io.on("connection", function(socket) {
+    socket.joined = false;
+    socket.hand = new gofish.CardHand(deck);
+    socket.on("join", function(username) {
+      if (socket.joined) return;
+      if (game.users.indexOf(username) >= 0) {
+        socket.emit("username taken", {
+          username: username
+        });
+        return;
       }
 
-      // echo globally that this client has left
-      socket.broadcast.emit('user left', {
-        username: socket.username,
-        users: socket.game.users
+      socket.username = username;
+      socket.hand = new gofish.CardHand(deck);
+      socket.user = {
+        name: username,
+        hand_size: socket.hand.cards.length,
+        ranks: []
+      };
+      game.users.push(socket.user);
+      socket.joined = true;
+      socket.emit("joined", {
+        username: username,
+        game: game
       });
-    }
+      socket.broadcast.emit("user joined", {
+        username: username,
+        game: game
+      });
+      if (pile.cards.length>=num_suits) {
+        deck.suits.forEach(function(ignored) {
+          var card = pile.give();
+          socket.hand.take(card);
+          socket.emit("take", {
+            rank: card.rank,
+            suit: card.suit
+          })
+        });
+        game.pile_size = pile.cards.length;
+        socket.user.hand_size = socket.hand.cards.length;
+        socket.emit("status", {
+          message: Mustache.render(
+            "You draws {{n}} cards",
+            {n: num_suits}),
+          game: game
+        });
+        socket.broadcast.emit("status", {
+          message: Mustache.render(
+            "{{user}} draws {{n}} cards",
+            {user: socket.username, n: num_suits}),
+          game: game
+        });
+      } else {
+        socket.emit("status", {
+          message: "Not enough cards in the pile for you &#128542;",
+          game: game          
+        });
+        socket.broadcast.emit("status", {
+          message: Mustache.render(
+            "Not enough cards in the pile for {{user}} &#128542;",
+            {user: socket.username}),
+          game: game          
+        });
+      }
+    });
+    socket.on("new message", function(data) {
+      socket.broadcast.emit("new message", {
+        username: socket.username,
+        message: data
+      });
+    });
+    socket.on("typing", function() {
+      socket.broadcast.emit("typing", {
+        username: socket.username
+      });
+    });
+    socket.on("stop typing", function() {
+      socket.broadcast.emit("stop typing", {
+        username: socket.username
+      });
+    });
+    socket.on("disconnect", function() {
+      if (socket.joined) {
+        var i = game.users.indexOf(socket.user);
+        if (i >= 0) {
+          game.users.splice(i, 1);
+        }
+        socket.hand.cards.forEach(function(card) {
+          pile.take(card);
+        });
+        socket.user.ranks.forEach(function(r) {
+          deck.getRank(r).cards.forEach(function(card) {
+            pile.take(card);            
+          });
+        });
+        pile.shuffle();
+        game.pile_size = pile.cards.length;
+                    
+        socket.broadcast.emit("user left", {
+          username: socket.username,
+          game: game
+        });
+      }
+    });
   });
-});
+  
+  server.listen(port, function() {
+    console.log(Mustache.render(
+      "Server listening at port {{port}}", { port: port }
+    ));
+  });
+                
+                
+
+  app.use(express.static("public"));
+
+})();
+

@@ -1,173 +1,114 @@
-define(function (require) {
-  // Load any app-specific modules
-  // with a relative require call,
-  // like:
-  //var gofish = require('./gofish');
-
-  // Load library/vendor modules using
-  // full IDs, like:
-  var $ = require('jquery');
-  var io = require('io');
-  var _bootstrap = require('bootstrap');
-
+define(function(require) {
+  var $ = require("jquery");
+  var io = require("io");
+  var _bootstrap = require("bootstrap");
+  var gofish = require("./gofish");
+  var Mustache = require("mustache");
   $(function() {
-    var FADE_TIME = 150; // ms
-    var TYPING_TIMER_LENGTH = 400; // ms
-    var COLORS = [
-      '#e21400', '#91580f', '#f8a700', '#f78b00',
-      '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
-      '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
-    ];
-
-    // Initialize variables
+    var FADE_TIME = 150;
+    var TYPING_TIMER_LENGTH = 400;
+    var COLORS = [ "#e21400", "#91580f", "#f8a700", "#f78b00", "#58dc00", "#287b00", "#a8f07a", "#4ae8c4", "#3b88eb", "#3824aa", "#a700ff", "#d300e7" ];
     var $window = $(window);
-    var $usernameInput = $('.usernameInput'); // Input for username
-    var $messagesDiv = $('#messages-div')
-    var $messages = $('.messages'); // Messages area
-    var $inputMessage = $('.inputMessage'); // Input message input box
-
-    var $loginModal = $('#login-modal'); // The login modal
-    var $chatPage = $('#chat-page'); // The chatroom page
-    var $userList = $('#user-list');
-
-    // Prompt for setting a username
-    var username = '';
+    var $usernameInput = $(".usernameInput");
+    var $messagesDiv = $("#messages-div");
+    var $cardsDiv = $("#cards-div");
+    var $messages = $(".messages");
+    var $inputMessage = $(".inputMessage");
+    var $loginModal = $("#login-modal");
+    var $chatPage = $("#chat-page");
+    var $userList = $("#user-list");
+    var cardTemplate = $("#card-template").html();
+    var userTemplate = $("#user-template").html();
+    var username = "";
+    var users = [];
     var $usermap = {};
     var typingmap = {};
     var connected = false;
     var typing = false;
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
-
     var socket = io();
 
-    function updateUsers (data) {
+    $.getJSON("/deck.json", function(data) {
+      socket.deck = new gofish.CardDeck(data);
+    });
+    function updateGame(data) {
+      if (data) {
+        users = data.game.users;
+        $('#pile-size').text(data.game.pile_size);
+      }
       $usermap = {};
-      data.users.forEach(function(user) {
-        $usermap[user] = $('<li/>')
-          .addClass('list-group-item');
-        updateUser(user);
+      users.forEach(function(user) {
+        $usermap[user.name] = $("<li/>").addClass("list-group-item").data("user", user);
+        updateUser(user.name);
       });
       $userList.empty();
-      for (var u in $usermap) {
-        $userList.append($usermap[u]);
-      }
+      users.forEach(function(user) {
+        $userList.append($usermap[user.name]);
+      });
     }
-
-    function updateUser(user) {
-      var $user = $usermap[user];
-      if (!$user) return;
-      $user.text(user);
-      if (user===username) {
-        $user.append(
-          $('<span/>').addClass('badge').html(
-            '<span class="glyphicon glyphicon-user" aria-hidden="true"></span>'
-          )
-        )
+    function updateUser(user_name) {
+      var $user = $usermap[user_name];
+      if (!$user) {
+        console.log("can't find element for user " + user_name);
+        return;
       }
-      if (typingmap[user]) {
-        $user.append(
-          $('<span/>').addClass('badge').html(
-            '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>'
-          )
-        );
-      };
+      $user.html(Mustache.render(userTemplate, {
+        user: $user.data("user"),
+        typing: typingmap[user_name],
+        me: user_name === username
+      }));
     }
-
-    // Sets the client's username
-    function setUsername () {
+    function setUsername() {
       username = cleanInput($usernameInput.val().trim().toLowerCase());
-
-      // If the username is valid
       if (username) {
-        $loginModal.modal('hide');
-        $currentInput = $inputMessage.removeAttr('disabled')
-          .focus().val('').attr('placeholder','chat here...');
-
-        // Tell the server your username
-        socket.emit('join', username);
+        $loginModal.modal("hide");
+        $currentInput = $inputMessage.removeAttr("disabled").focus().val("").attr("placeholder", "chat here...");
+        socket.emit("join", username);
       }
     }
-
-    // Sends a chat message
-    function sendMessage () {
+    function sendMessage() {
       var message = $inputMessage.val();
-      // Prevent markup from being injected into the message
       message = cleanInput(message);
-      // if there is a non-empty message and a socket connection
       if (message && connected) {
-        $inputMessage.val('');
+        $inputMessage.val("");
         addChatMessage({
           username: username,
           message: message
         });
-        // tell server to execute 'new message' and send along one parameter
-        socket.emit('new message', message);
+        socket.emit("new message", message);
       }
     }
-
-    // Log a message
-    function log (message, options) {
-      var $el = $('<li>').addClass('log').text(message);
+    function log(message, options) {
+      var $el = $("<li>").addClass("log").text(message);
       addMessageElement($el, options);
     }
-
-    // Adds the visual chat message to the message list
-    function addChatMessage (data, options) {
-      // Don't fade the message in if there is an 'X was typing'
-      var $typingMessages = getTypingMessages(data);
-      options = options || {};
-      if ($typingMessages.length !== 0) {
-        options.fade = false;
-        $typingMessages.remove();
-      }
-
-      var $usernameDiv = $('<span class="username"/>')
-        .text(data.username)
-        .css('color', getUsernameColor(data.username));
-      var $messageBodyDiv = $('<span/>').addClass('messaegBody')
-        .text(data.message);
-      var typingClass = data.typing ? 'typing' : '';
-      var $messageDiv = $('<li class="message"/>')
-        .data('username', data.username)
-        .addClass(typingClass)
-        .append($usernameDiv, $messageBodyDiv);
-
+    function addChatMessage(data, options) {
+      var $usernameDiv = $('<span class="username"/>').text(data.username).css("color", getUsernameColor(data.username));
+      var $messageBodyDiv = $("<span/>").addClass("messaegBody").text(data.message);
+      var typingClass = data.typing ? "typing" : "";
+      var $messageDiv = $('<li class="message"/>').data("username", data.username).addClass(typingClass).append($usernameDiv, $messageBodyDiv);
       addMessageElement($messageDiv, options);
     }
-
-    // Adds the visual chat typing message
-    function addChatTyping (data) {
+    function addChatTyping(data) {
       typingmap[data.username] = true;
-     updateUser(data.username);
-    }
-
-    // Removes the visual chat typing message
-    function removeChatTyping (data) {
-      typingmap[data.username] = false;
       updateUser(data.username);
     }
-
-    // Adds a message element to the messages and scrolls to the bottom
-    // el - The element to add as a message
-    // options.fade - If the element should fade-in (default = true)
-    // options.prepend - If the element should prepend
-    //   all other messages (default = false)
-    function addMessageElement (el, options) {
+    function removeChatTyping(data) {
+      delete typingmap[data.username];
+      updateUser(data.username);
+    }
+    function addMessageElement(el, options) {
       var $el = $(el);
-
-      // Setup default options
       if (!options) {
         options = {};
       }
-      if (typeof options.fade === 'undefined') {
+      if (typeof options.fade === "undefined") {
         options.fade = true;
       }
-      if (typeof options.prepend === 'undefined') {
+      if (typeof options.prepend === "undefined") {
         options.prepend = false;
       }
-
-      // Apply options
       if (options.fade) {
         $el.hide().fadeIn(FADE_TIME);
       }
@@ -176,145 +117,113 @@ define(function (require) {
       } else {
         $messages.append($el);
       }
-
-      // Scroll to bottom
-      $messagesDiv.animate(
-        { scrollTop: $messagesDiv.prop("scrollHeight") - $messagesDiv.height() },
-        500);
+      $messagesDiv.animate({
+        scrollTop: $messagesDiv.prop("scrollHeight") - $messagesDiv.height()
+      }, 500);
     }
-
-    // Prevents input from having injected markup
-    function cleanInput (input) {
-      return $('<div/>').text(input).text();
+    function cleanInput(input) {
+      return $("<div/>").text(input).text();
     }
-
-    // Updates the typing event
-    function updateTyping () {
+    function updateTyping() {
       if (connected) {
         if (!typing) {
           typing = true;
-          socket.emit('typing');
+          socket.emit("typing");
         }
-        lastTypingTime = (new Date()).getTime();
-
-        setTimeout(function () {
-          var typingTimer = (new Date()).getTime();
+        lastTypingTime = new Date().getTime();
+        setTimeout(function() {
+          var typingTimer = new Date().getTime();
           var timeDiff = typingTimer - lastTypingTime;
           if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-            socket.emit('stop typing');
+            socket.emit("stop typing");
             typing = false;
           }
         }, TYPING_TIMER_LENGTH);
       }
     }
-
-    // Gets the 'X is typing' messages of a user
-    function getTypingMessages (data) {
-      return $('.typing.message').filter(function (i) {
-        return $(this).data('username') === data.username;
-      });
-    }
-
-    // Gets the color of a username through our hash function
-    function getUsernameColor (username) {
-      // Compute hash code
+    function getUsernameColor(username) {
       var hash = 7;
       for (var i = 0; i < username.length; i++) {
-         hash = username.charCodeAt(i) + (hash << 5) - hash;
+        hash = username.charCodeAt(i) + (hash << 5) - hash;
       }
-      // Calculate color
       var index = Math.abs(hash % COLORS.length);
       return COLORS[index];
     }
-
-    // Keyboard events
-
-    $window.keydown(function (event) {
-      // Auto-focus the current input when a key is typed
+    $window.keydown(function(event) {
       if (!(event.ctrlKey || event.metaKey || event.altKey)) {
         $currentInput.focus();
       }
-      // When the client hits ENTER on their keyboard
       if (event.which === 13) {
         if (username) {
           sendMessage();
-          socket.emit('stop typing');
+          socket.emit("stop typing");
           typing = false;
         } else {
           setUsername();
         }
       }
     });
-
-    $inputMessage.on('input', function() {
+    $inputMessage.on("input", function() {
       updateTyping();
     });
-
-    // Click events
-
-    // Focus input when clicking anywhere on login modal
-    $loginModal.click(function () {
+    $loginModal.click(function() {
       $currentInput.focus();
     });
-
-    // Focus input when clicking on the message input's border
-    $inputMessage.click(function () {
+    $inputMessage.click(function() {
       $inputMessage.focus();
     });
-
-    // Socket events
-
-    // Whenever the server emits 'joined', log the login message
-    socket.on('joined', function (data) {
+    socket.on("connect", function() {
+      socket.hand = new gofish.CardHand(socket.deck);
+    });
+    socket.on("joined", function(data) {
       connected = true;
-      // Display the welcome message
-      var message = "Welcome, "+data.username;
+      var message = "Welcome, " + data.username;
       log(message, {
         prepend: true
       });
-      updateUsers(data);
+      updateGame(data);
     });
-
-    socket.on('username taken', function(data) {
-      username = '';
-      $currentInput = $usernameInput.focus().val('')
-        .attr('placeholder', 'Sorry, '+data.username+' is taken.');
-      $loginModal.modal('show');
+    socket.on("username taken", function(data) {
+      username = "";
+      $currentInput = $usernameInput.focus().val("")
+        .attr("placeholder",
+              "Sorry, " + data.username + " is taken.");
+      $loginModal.modal("show");
     });
-
-    // Whenever the server emits 'new message', update the chat body
-    socket.on('new message', function (data) {
+    socket.on("new message", function(data) {
       addChatMessage(data);
     });
-
-    // Whenever the server emits 'user joined', log it in the chat body
-    socket.on('user joined', function (data) {
-      log(data.username + ' joined');
-      updateUsers(data);
+    socket.on("status", function(data) {
+      log(data.message);
+      updateGame(data);
     });
-
-    // Whenever the server emits 'user left', log it in the chat body
-    socket.on('user left', function (data) {
-      log(data.username + ' left');
-      updateUsers(data);
-      removeChatTyping(data);
+    socket.on("take", function(data) {
+      var card = socket.hand.deck.getCard(
+        data.rank, data.suit);
+      socket.hand.take(card);
+      socket.hand.sort();
+      $cardsDiv.empty();
+      socket.hand.cards.forEach(function(card) {
+        $cardsDiv.append($(Mustache.render(cardTemplate, card)));
+      });
     });
-
-    // Whenever the server emits 'typing', show the typing message
-    socket.on('typing', function (data) {
+    socket.on("user joined", function(data) {
+      log(data.username + " joins");
+      updateGame(data);
+    });
+    socket.on("user left", function(data) {
+      log(data.username + " leaves");
+      updateGame(data);
+    });
+    socket.on("typing", function(data) {
       addChatTyping(data);
     });
-
-    // Whenever the server emits 'stop typing', kill the typing message
-    socket.on('stop typing', function (data) {
+    socket.on("stop typing", function(data) {
       removeChatTyping(data);
     });
-
-    $loginModal.on('hidden.bs.modal', function (e) {
-      if (!username)
-        $loginModal.modal('show');
+    $loginModal.on("hidden.bs.modal", function(e) {
+      if (!username) $loginModal.modal("show");
     });
-    
-    $loginModal.modal('show');
+    $loginModal.modal("show");
   });
 });

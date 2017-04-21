@@ -28,11 +28,13 @@ requirejs([ "mustache", "app/gofish" ],
   io.on("connection", function(socket) {
     socket.joined = false;
     socket.hand = new gofish.CardHand(deck);
+    socket.sanitize = function(s) {
+      return Mustache.render(
+        "{{s}}", {s: s});
+    }
     socket.on("join", function(username) {
       if (socket.joined) return;
-      username = Mustache.render(
-        "{{sanitize_me}}",
-        {sanitize_me: username.trim()});
+      username = socket.sanitize(username.trim());
       if (!username) return;
       if (game.users.indexOf(username) >= 0) {
         socket.emit("username taken", {
@@ -95,6 +97,7 @@ requirejs([ "mustache", "app/gofish" ],
       }
     });
     socket.on("new message", function(data) {
+      data = socket.sanitize(data);
       socket.broadcast.emit("new message", {
         username: socket.username,
         message: data

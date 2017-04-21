@@ -60,7 +60,7 @@ define(function(require) {
       }));
     }
     function setUsername() {
-      username = cleanInput($usernameInput.val().trim().toLowerCase());
+      username = $usernameInput.val().trim().toLowerCase();
       if (username) {
         $loginModal.modal("hide");
         $currentInput = $inputMessage.removeAttr("disabled").focus().val("").attr("placeholder", "chat here...");
@@ -68,14 +68,16 @@ define(function(require) {
       }
     }
     function sendMessage() {
-      var message = $inputMessage.val();
-      message = cleanInput(message);
+      var message = $inputMessage.val().trim();
       if (message && connected) {
         $inputMessage.val("");
-        addChatMessage({
-          username: username,
-          message: message
-        });
+        addChatMessage(
+          {
+            username: username,
+            message: message
+          },
+          { sanitize: true }
+        );
         socket.emit("new message", message);
       }
     }
@@ -84,11 +86,17 @@ define(function(require) {
       addMessageElement($el, options);
     }
     function addChatMessage(data, options) {
-      var $usernameDiv = $('<span class="username"/>').text(data.username).css("color", getUsernameColor(data.username));
-      var $messageBodyDiv = $("<span/>").addClass("messaegBody").text(data.message);
+      var $username = $('<span class="username"/>').html(data.username).css("color", getUsernameColor(data.username));
+      var $messageBody = $("<span/>").addClass("messaegBody");
+      if (options && options.sanitize) {
+        $messageBody.text(data.message);
+      } else {
+        $messageBody.html(data.message);
+      }
       var typingClass = data.typing ? "typing" : "";
-      var $messageDiv = $('<li class="message"/>').data("username", data.username).addClass(typingClass).append($usernameDiv, $messageBodyDiv);
-      addMessageElement($messageDiv, options);
+      var $message = $('<li class="message"/>').data("username", data.username)
+        .addClass(typingClass).append($username, $messageBody);
+      addMessageElement($message, options);
     }
     function addChatTyping(data) {
       typingmap[data.username] = true;
@@ -120,9 +128,6 @@ define(function(require) {
       $messagesDiv.animate({
         scrollTop: $messagesDiv.prop("scrollHeight") - $messagesDiv.height()
       }, 500);
-    }
-    function cleanInput(input) {
-      return $("<div/>").text(input).text();
     }
     function updateTyping() {
       if (connected) {

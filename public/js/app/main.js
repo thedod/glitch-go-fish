@@ -80,7 +80,7 @@ define(function(require) {
       }
     }
     function log(message, options) {
-      var $el = $("<li>").addClass("log").text(message);
+      var $el = $("<li>").addClass("log").html(message);
       addMessageElement($el, options);
     }
     function addChatMessage(data, options) {

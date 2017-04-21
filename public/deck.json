@@ -5,7 +5,7 @@
   "suits": [
     {
       "name": "Communications",
-      "symbol": "&#128498;"
+      "symbol": "&#128276;"
     },
     {
       "name": "Defense",
@@ -65,7 +65,7 @@
     },
     {
       "name": "Ministry",
-      "symbol": "&#127963;",
+      "symbol": "&#9873;",
       "desc_template": "Minister of {{suit}}",
       "by_suit": {
         "Communications": {

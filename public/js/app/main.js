@@ -37,8 +37,8 @@ define(function(require) {
     function updateGame(data) {
       if (data) {
         users = data.game.users;
-        $('#play-control').empty();
         $('#pile-size').text(data.game.pile_size);
+        $('#play-modal').modal('hide');
         if (data.game.turn!==null) {
           var user = users[data.game.turn];
           user.playing = true;
@@ -48,7 +48,26 @@ define(function(require) {
                 users: data.game.users,
                 ranks: socket.deck.ranks,
                 suits: socket.deck.suits }
-            ))
+            ));
+            $('#play-controls select').change(function(e) {
+              $('#play-button').prop(
+                'disabled',
+                !($('#ask-from').val() &&
+                  $('#ask-rank').val() &&
+                  $('#ask-suit').val())
+              );
+            });
+            $('#play-button').click(function() {
+              socket.emit(
+                'ask', {
+                  from: $('#ask-from').val(),
+                  rank: $('#ask-rank').val(),
+                  suit: $('#ask-suit').val()
+                }
+              );
+              $('#play-modal').modal('hide');
+            });
+            $('#play-modal').modal('show');
           }
         }
       }
@@ -188,7 +207,7 @@ define(function(require) {
     $loginModal.click(function() {
       $currentInput.focus().select();
     });
-    $('#chat-area').click(function() {
+    $('#messages-div').click(function() {
       $inputMessage.focus();
     });
     socket.on("connect", function() {

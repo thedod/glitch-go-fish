@@ -35,9 +35,8 @@
         </div>
         <div class="row flex-row flex-grow">
           <div id="messages-div" class=
-          "col-xs-6 flex-col flex-grow">
-            <ul class="messages list-unstyled">
-            </ul>
+               "col-xs-6 flex-col flex-grow">
+            <ul class="messages list-unstyled"></ul>
           </div>
           <div id="game-div" class="col-xs-6 flex-col">
             <h3>
@@ -48,18 +47,17 @@
               </span>
             </h3>
             <ul id="user-list" class="list-group"></ul>
-            <div id="play-controls"></div>
           </div>
         </div>
         <div class="row flex-row">
           <div class="inputMessageDiv col-xs-12 flex-col">
-            <input class="form-control inputMessage bg-primary" placeholder=
-            "Please wait..." disabled>
+            <input class="form-control inputMessage"
+                   placeholder="Please wait..." disabled>
           </div>
         </div>
       </div>
     </div><!-- /#chat-page -->
-    <div id="login-modal" class="modal" tabindex="-1" role=
+    <div id="login-modal" class="modal fade" tabindex="-1" role=
     "dialog" data-backdrop="static">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -75,6 +73,18 @@
               </div>
             </div>
           </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="play-modal" class="modal fade" tabindex="-1" role=
+    "dialog" data-backdrop="static">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Your turn:</h4>
+          </div>
+          <div class="modal-body" id="play-controls"></div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -128,47 +138,39 @@
   </div>
   
   <div id="play-template" class="mustache">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Your turn:</h3>
+    <form class="form-inline" action="javascript:void(0)">
+      <div class="form-group">
+        <label for="#ask-from">ask</label>
+        <select id="ask-from">
+          <option value=""></option>
+          {{#users}}
+          {{^playing}}
+              <option value="{{name}}">{{name}}</option>
+            {{/playing}}
+          {{/users}}
+        </select>
       </div>
-      <div class="panel-body text-center">
-        <form class="form-inline">
-          <div class="form-group">
-            <label for="#who">ask</label>
-            <select id="who">
-              <option value=""></option>
-              {{#users}}
-                {{^playing}}
-                  <option value="{{name}}">{{name}}</option>
-                {{/playing}}
-              {{/users}}
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="#rank">for</label>
-            <select id="rank">
-              <option value=""></option>
-              {{#ranks}}
-                <option value="{{name}}">{{{symbol}}} {{name}}</option>
-              {{/ranks}}
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="#suit">of</label>
-            <select id="suit">
-              <option value=""></option>
-              {{#suits}}
-                <option value="{{name}}">{{{symbol}}} {{name}}</option>
-              {{/suits}}
-            </select>
-          </div>
-          <button id="play-button" class="btn btn-default" disabled>Play</button>
-        </form>
+      <div class="form-group">
+        <label for="#ask-rank">for</label>
+        <select id="ask-rank">
+          <option value=""></option>
+          {{#ranks}}
+            <option value="{{name}}">{{{symbol}}} {{name}}</option>
+          {{/ranks}}
+        </select>
       </div>
-    </div>
+      <div class="form-group">
+        <label for="#ask-suit">of</label>
+        <select id="ask-suit">
+          <option value=""></option>
+          {{#suits}}
+            <option value="{{name}}">{{{symbol}}} {{name}}</option>
+          {{/suits}}
+        </select>
+      </div>
+      <button id="play-button" class="btn btn-default" disabled>Play</button>
+    </form>
   </div>
-
   <script data-main="/js/main" src="/js/lib/require.js"></script>
 </body>
 </html>

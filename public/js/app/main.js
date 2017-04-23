@@ -80,7 +80,7 @@ define(function(require) {
                 }
               );
               log(Mustache.render(
-                "You ask {{{u}}} for {{r}} of {{s}}", {
+                "You ask {{{u}}} for {{r}} of {{s}}...", {
                   u: $('#ask-from').val(),
                   r: $('#ask-rank').val(),
                   s: $('#ask-suit').val()
@@ -106,7 +106,6 @@ define(function(require) {
     function updateUser(user) {
       var $user = $usermap[user.name];
       if (!$user) {
-        console.log("can't find element for user " + user.name);
         return;
       }
       $user.html(Mustache.render(userTemplate, {
@@ -243,6 +242,11 @@ define(function(require) {
     socket.on("connect", function() {
       // nothing so far
     });
+    socket.on("disconnect", function() {
+      // give server 15 seconds to restart ;)
+      setTimeout("document.location.reload()", 15000);
+    });
+
     socket.on("joined", function(data) {
       socket.username = data.username;
       socket.hand = new gofish.CardHand(socket.deck);
@@ -270,17 +274,18 @@ define(function(require) {
     socket.on("take", function(data) {
       var card = socket.hand.deck.getCard(
         data.rank, data.suit);
-      socket.hand.take(card);
       if (!card) {
         console.log("can't take card: "+JSON.stringify(data));
         return;
       }
-      socket.hand.sort();
+      socket.hand.take(card);
+      socket.hand.pull_rank(); // if you find one, discard the cards
       updateHand(socket);
       if (data.from) {
         log(Mustache.render(
           "you get {{rank}} of {{suit}} from {{{from}}}", data));
       };
+      
     });
     socket.on("give", function(data) {
       var index = socket.hand.cards.findIndex(function(c) {

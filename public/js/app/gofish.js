@@ -11,7 +11,7 @@ define(function () {
     for (var s=0 ; s<this.suits.length; s++) {
       var suit = this.suits[s];
       this.suit_by_name[suit.name] = suit;
-      suit.order = this.suits.length-(s+1);
+      suit.order = s;
       suit.cards = [];
       suit.by_rank = {};
       if (!suit.symbol) suit.symbol = suit.name[0];
@@ -19,7 +19,7 @@ define(function () {
     for (var r=0; r<this.ranks.length; r++) {
       var rank = this.ranks[r];
       this.rank_by_name[rank.name] = rank;
-      rank.order = this.ranks.length-(r+1);
+      rank.order = r;
       rank.cards = [];
       if (!rank.symbol) rank.symbol = rank.name[0];
       for (var s=0 ; s<this.suits.length; s++) {
@@ -43,6 +43,17 @@ define(function () {
     this.getSuit = function(s) { return this.suit_by_name[s]; };
     this.getCard = function(r,s) { return this.rank_by_name[r].by_suit[s]};
     this.fullHand = function() { return this.cards.slice(); }; // clone, don't pwn
+    
+    // clone a simplified rank object for GUI
+    this.fullRank = function(r) {
+      var rank = this.getrank(r);
+      return {
+        name: rank.name,
+        symbol: rank.symbol,
+        desc_template: rank.desc_template,
+        cards: rank.cards.slice()
+      }
+    };
   };
   
   // CardHand (also used as the table's pile)
@@ -77,8 +88,37 @@ define(function () {
         this.cards[i] = t;
       }
     };
-  };
-
+    // if hands contains a full rank, returns
+    // a simplified clone of the rank pulled
+    this.pull_rank = function() {
+      this.sort();
+      var num_suits = this.deck.suits.length;
+      var rank=null, rankstart=null, count=0, index=0;
+      for (var i=0;
+           i<this.cards.length && count<num_suits;
+           i++) {
+        if (this.cards[i].rank===rank) {
+          count++;
+        } else {
+          rank = this.cards[i].rank;
+          rankstart = i;
+          count = 1;
+        }
+      }
+      if (count===num_suits) {
+        this.cards.splice(rankstart, num_suits);
+        rank = this.deck.getRank(rank);
+        // Clone it
+        return {
+          name: rank.name,
+          symbol: rank.symbol,
+          desc_template: rank.desc_template,
+          cards: rank.cards.slice() // clone the rank's card array
+        }
+      };
+      return null;
+    }
+  }
   return {
     CardDeck: CardDeck,
     CardHand: CardHand

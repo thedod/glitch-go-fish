@@ -59,8 +59,10 @@ define(function () {
     this.ask = function(rank, suit, is_taking) {
       var c = this.deck.getCard(rank, suit);
       var i = this.cards.indexOf(c);
-      if (i<1) return null;
-      if (is_taking) delete this.cards[i];
+      if (i<0) return null;
+      if (is_taking) {
+        this.cards.splice(i,1);
+      }
       return c;
     };
     

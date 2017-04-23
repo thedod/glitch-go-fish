@@ -23,8 +23,9 @@ requirejs([ "mustache", "app/gofish" ],
   var game = {
     pile_size: pile.cards.length,
     turn: null, // it's users[turn]'s turn (unless null)
-    users: [],
+    users: []
   };
+  var username2socket = [];
 
   io.on("connection", function(socket) {
     socket.joined = false;
@@ -36,18 +37,35 @@ requirejs([ "mustache", "app/gofish" ],
     // we don't define these game helpers as methods of game,
     // so that we can emit/serialize it.
     socket.update_game = function() {
-      game.pile_size = pile.cards.length
+      game.pile_size = pile.cards.length;
+      game.users.forEach(function(u) {
+        var s = username2socket[u.name];
+        if (s) {
+          u.hand_size = s.hand.cards.length;
+        } else {
+          u.hand_size = 0;
+          console.log('lost socket for '+JSON.stringify(u));
+        }
+      });
     };
     socket.next_turn = function() {
-      if (game.users.length<=1) {
-          game.turn = null;
+      var players = game.users.filter(function(u) {
+        return u.hand_size>0;
+      });
+      if (players.length<=1) {
+          game.turn = null; // it takes two to go fish
       } else {
         if (game.turn===null) {
-          game.turn = 0;
+          game.turn = players[0].name;
         } else {
-          game.turn = (game.turn+1)%game.user.length;
+          var current = players.findIndex(function(u) {
+            return u.name===game.turn;
+          });
+          game.turn = players[
+            current>=0? (current+1)%players.length: 0
+          ].name;
         }
-        var message = game.users[game.turn].name+"'s turn";
+        var message = game.turn+"'s turn";
         socket.emit(
           "status", { message: message, game: game });
         socket.broadcast.emit(
@@ -59,17 +77,16 @@ requirejs([ "mustache", "app/gofish" ],
       if (socket.joined) return;
       username = socket.sanitize(username.trim().toLowerCase());
       if (!username) return;
-      if (
-        game.users.find(
-          function (user) { return user.name===username; }
-        ))
-      {
+      if (game.users.find(
+        function (user) { return user.name===username;})
+      ) {
         socket.emit(
           "username taken", { username: username });
         return;
       }
 
       socket.username = username;
+      username2socket[username] = socket;
       socket.hand = new gofish.CardHand(deck);
       socket.user = {
         name: username,
@@ -143,24 +160,115 @@ requirejs([ "mustache", "app/gofish" ],
         username: socket.username
       });
     });
+    socket.on("ask", function(data) {
+      if (game.turn===socket.username) {
+        var fromsock = username2socket[data.from];
+        if (fromsock) {
+          var card = fromsock.hand.ask(data.rank, data.suit, true);
+          if (card) {
+            socket.hand.take(card);
+            socket.hand.sort();
+            if (!fromsock.hand.cards.length) {
+              // Leaves the game empty handed
+              fromsock.emit("status", {
+                message: "You leave the game (but you can stay and chat)",
+                game: game
+              });
+              fromsock.broadcast.emit("status", {
+                message: Mustache.render(
+                  "{{{u}}} leaves the game",
+                  { u: fromsock.username }), // TODO list owned ranks
+                game: game
+              });
+            }
+            fromsock.emit("give", {
+              rank: card.rank, suit: card.suit,
+              to: socket.username
+            });
+            socket.emit("take", {
+              rank: card.rank, suit: card.suit,
+              from: data.from
+            });
+            // @@@check for rank completion
+            socket.update_game();
+            
+            socket.emit("status", { // excuse to send up-to-date game to client
+              message: "You get another turn &#9996;",
+              game: game
+            })
+            
+            socket.broadcast.emit(
+              "status", {
+                message: Mustache.render(
+                  "{{to}} takes {{card.rank}} of {{card.suit}} from {{from}}",
+                  { from: fromsock.username, to: socket.username, card: card }),
+                game: game
+              }
+            );
+          } else {
+            // Go fish
+            card = pile.give();
+            if (card) {
+              socket.hand.take(card);
+              // @@@check for rank completion
+              socket.update_game();
+              socket.emit(
+                "take", {rank: card.rank, suit:card.suit});
+              socket.emit(
+                "status", { message: "You go fish", game: game });
+              socket.broadcast.emit(
+                "status", { message: "Go fish", game: game });  
+            } else {
+              socket.emit(
+                "status", { message: "Can't go fish &#128542;", game: game });  
+              socket.broadcast.emit(
+                "status", { message: "Can't go fish &#128542;", game: game });  
+            };
+            socket.next_turn();
+          }
+        } else {
+          // Should never happen
+          socket.emit(
+            "status", {
+            message: "couldn't find user "+data.from,
+            game: game
+          });
+        }
+      } else { // not user's turn. Ignore.
+        console.log("username "+socket.username+" is cheating!?! turn='"+
+                    game.turn+"'");
+      }
+    });
     socket.on("disconnect", function() {
       if (socket.joined) {
         var i = game.users.indexOf(socket.user);
         if (i >= 0) {
           game.users.splice(i, 1);
-          if (i===game.turn || game.users.length==1) {
+          if (socket.username===game.turn || // current player leaves
+              game.users.filter(
+                function(u) { return u.hand_size>0 }).length===1) {
             socket.next_turn();
           }
+        }
+        i = game.users.indexOf(socket.user);
+        if (i>=0) {
+          game.users.splice(i, 1);
         }
         socket.hand.cards.forEach(function(card) {
           pile.take(card);
         });
         socket.user.ranks.forEach(function(r) {
           deck.getRank(r).cards.forEach(function(card) {
-            pile.take(card);         
+            pile.take(card);
           });
         });
         pile.shuffle();
+        if (username2socket[socket.username]) {
+          delete username2socket[socket.username];
+        } else {
+          console.log(
+            "Found no socket when "+socket.username+" was leaving");
+        }
         socket.update_game();
                     
         socket.broadcast.emit("user left", {
@@ -172,9 +280,9 @@ requirejs([ "mustache", "app/gofish" ],
   });
   
   server.listen(port, function() {
-    console.log(Mustache.render(
-      "Server listening at port {{port}}", { port: port }
-    ));
+    console.log(
+      "Server listening at port "+port
+    );
   });
                 
                 

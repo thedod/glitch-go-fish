@@ -57,38 +57,28 @@
         </div>
       </div>
     </div><!-- /#chat-page -->
-    <div id="login-modal" class="modal fade" tabindex="-1" role=
-    "dialog" data-backdrop="static">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Welcome to Go Fish <small>work in progress</small></h4>
-          </div>
-          <div class="modal-body">
-            <div class="jumbotron text-center">
-              <div class="page-header">
-                <h1>What's your nickname?</h1>
-                <input type="text" class="usernameInput"
-                       id="username" placeholder="Type your name..."/>
-              </div>
+  </div>
+  
+  <div id="login-modal" class="modal fade" tabindex="-1"
+       role="dialog" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Welcome to Go Fish <small>work in progress</small></h4>
+        </div>
+        <div class="modal-body">
+          <div class="jumbotron text-center">
+            <div class="page-header">
+              <h1>What's your nickname?</h1>
+              <input type="text" class="usernameInput"
+                     id="username" placeholder="Type your name..."/>
             </div>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div id="play-modal" class="modal fade" tabindex="-1" role=
-    "dialog" data-backdrop="static">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Your turn:</h4>
-          </div>
-          <div class="modal-body" id="play-controls"></div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  </div><!-- /.container -->
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  
   <div id="card-template" class="mustache">
     <div class="col-md-1 flex-col">
       <div id="{{ rank }}-of-{{ suit }}-modal" class="modal fade card-modal"
@@ -109,6 +99,7 @@
       </div><!-- /.modal -->
 
       <button type="button" class="btn btn-default card-button" data-toggle="modal"
+              title="{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})"
               data-target="#{{ rank }}-of-{{ suit }}-modal">
         <img class="img-responsive" src="{{ src }}" alt="{{ desc }}" />
       </button>
@@ -120,16 +111,18 @@
       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
     {{/me}}
     {{{ user.name }}}
-    {{#user.playing}}
+    {{#playing}}
       <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-    {{/user.playing}}
+    {{/playing}}
     {{#user.ranks}}
       <div class="badge">{{ symbol }}</div>
     {{/user.ranks}}
+    {{#user.hand_size}}
     <div class="badge">
       <span class="glyphicon glyphicon-duplicate" aria-hidden="true"/>
-      <span>{{user.hand_size}}</span>
+      <span>{{.}}</span>
     </div>
+    {{/user.hand_size}}
     {{#typing}}
       <div class="badge">
         <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
@@ -138,15 +131,13 @@
   </div>
   
   <div id="play-template" class="mustache">
-    <form class="form-inline" action="javascript:void(0)">
+    <form id="play-controls" class="form-inline" action="javascript:void(0)">
       <div class="form-group">
         <label for="#ask-from">ask</label>
         <select id="ask-from">
           <option value=""></option>
           {{#users}}
-          {{^playing}}
-              <option value="{{name}}">{{name}}</option>
-            {{/playing}}
+            <option value="{{name}}">{{name}}</option>
           {{/users}}
         </select>
       </div>
@@ -171,6 +162,7 @@
       <button id="play-button" class="btn btn-default" disabled>Play</button>
     </form>
   </div>
+  
   <script data-main="/js/main" src="/js/lib/require.js"></script>
 </body>
 </html>

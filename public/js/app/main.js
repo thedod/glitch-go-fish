@@ -34,21 +34,35 @@ define(function(require) {
     $.getJSON("/deck.json", function(data) {
       socket.deck = new gofish.CardDeck(data);
     });
+    
     function updateGame(data) {
       if (data) {
         users = data.game.users;
+        turn = data.game.turn;
         $('#pile-size').text(data.game.pile_size);
-        $('#play-modal').modal('hide');
-        if (data.game.turn!==null) {
-          var user = users[data.game.turn];
-          user.playing = true;
-          if (user.name===username) {
-            $('#play-controls').html(Mustache.render(
+      }
+      // is popover shown? http://stackoverflow.com/a/13442857
+      if ($("#cards-div").next('div.popover:visible').length>0) {
+        $("#cards-div").popover('destroy');
+      };
+      if (turn!==null) {
+        if (turn===username) { // our turn
+          $('#cards-div').popover({
+            trigger: 'manual',
+            animation: false,
+            selector: '#cards-div', // https://github.com/twbs/bootstrap/issues/4215
+            html: true,
+            placement: 'bottom',
+            viewport: { selector: '#chat-area' },
+            title: "Your turn:",
+            content: Mustache.render(
               playTemplate,{
-                users: data.game.users,
+                users: users.filter(function(u) {
+                  return u.hand_size>0 && u.name!==username; }),
                 ranks: socket.deck.ranks,
-                suits: socket.deck.suits }
-            ));
+                suits: socket.deck.suits
+              })
+          }).on("shown.bs.popover", function() {
             $('#play-controls select').change(function(e) {
               $('#play-button').prop(
                 'disabled',
@@ -59,40 +73,56 @@ define(function(require) {
             });
             $('#play-button').click(function() {
               socket.emit(
-                'ask', {
+                "ask", {
                   from: $('#ask-from').val(),
                   rank: $('#ask-rank').val(),
                   suit: $('#ask-suit').val()
                 }
               );
-              $('#play-modal').modal('hide');
+              log(Mustache.render(
+                "You ask {{{u}}} for {{r}} of {{s}}", {
+                  u: $('#ask-from').val(),
+                  r: $('#ask-rank').val(),
+                  s: $('#ask-suit').val()
+                }
+              ));
+              $('#cards-div').popover('destroy');
             });
-            $('#play-modal').modal('show');
-          }
+          });
+          $('#cards-div').popover('show');
         }
       }
       $usermap = {};
-      users.forEach(function(user) {
+      users.forEach(function(user) { // also non-players
         $usermap[user.name] = $("<li/>")
-          .addClass("list-group-item").data("user", user);
-        updateUser(user.name);
+          .addClass("list-group-item");
+        updateUser(user);
       });
       $userList.empty();
       users.forEach(function(user) {
         $userList.append($usermap[user.name]);
       });
     }
-    function updateUser(user_name) {
-      var $user = $usermap[user_name];
+    function updateUser(user) {
+      var $user = $usermap[user.name];
       if (!$user) {
-        console.log("can't find element for user " + user_name);
+        console.log("can't find element for user " + user.name);
         return;
       }
       $user.html(Mustache.render(userTemplate, {
-        user: $user.data("user"),
-        typing: typingmap[user_name],
-        me: user_name === username,
+        user: user,
+        typing: typingmap[user.name],
+        playing: turn!==null && turn===user.name,
+        me: user.name === username
       }));
+    }
+    function updateHand(socket) {
+      $cardsDiv.empty();
+      socket.hand.cards.forEach(function(card) {
+        $cardsDiv.append(
+          $(Mustache.render(cardTemplate, card)));
+      });
+      updateGame();
     }
     function setUsername() {
       username = $usernameInput.val().trim().toLowerCase();
@@ -211,10 +241,11 @@ define(function(require) {
       $inputMessage.focus();
     });
     socket.on("connect", function() {
-      socket.hand = new gofish.CardHand(socket.deck);
+      // nothing so far
     });
     socket.on("joined", function(data) {
-      username = data.username;
+      socket.username = data.username;
+      socket.hand = new gofish.CardHand(socket.deck);
       connected = true;
       var message = "Welcome, "+data.username;
       log(message, {
@@ -240,12 +271,34 @@ define(function(require) {
       var card = socket.hand.deck.getCard(
         data.rank, data.suit);
       socket.hand.take(card);
+      if (!card) {
+        console.log("can't take card: "+JSON.stringify(data));
+        return;
+      }
       socket.hand.sort();
-      $cardsDiv.empty();
-      socket.hand.cards.forEach(function(card) {
-        $cardsDiv.append($(Mustache.render(cardTemplate, card)));
-      });
+      updateHand(socket);
+      if (data.from) {
+        log(Mustache.render(
+          "you get {{rank}} of {{suit}} from {{{from}}}", data));
+      };
     });
+    socket.on("give", function(data) {
+      var index = socket.hand.cards.findIndex(function(c) {
+        return c.rank==data.rank && c.suit==data.suit;
+      });
+      if (index<0) {
+        console.log("can't give card: "+JSON.stringify(data));
+        return;
+      }
+      socket.hand.cards.splice(index,1);
+      updateHand(socket);
+      // No need. Recipient gets the broadcast in third person ;)
+      // if (data.to) {
+      //   log(Mustache.render(
+      //   "you give {{rank}} of {{suit}} to {{{to}}}", data));
+      // }
+    });
+    
     socket.on("user joined", function(data) {
       log(data.username + " joins");
       updateGame(data);

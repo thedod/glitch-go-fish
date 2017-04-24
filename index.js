@@ -72,6 +72,22 @@ requirejs([ "mustache", "app/gofish" ],
           "status", { message: message, game: game });
       }
     };
+    socket.check_bust = function(sock) {
+      if (!sock.hand.cards.length) {
+        sock.next_turn();
+        sock.update_game();
+        sock.emit("status", {
+          message: "You're no longer playing (but you can stay and chat)",
+          game: game
+        });
+        sock.broadcast.emit("status", {
+          message: Mustache.render(
+            "{{{u}}} is no longer playing",
+            { u: sock.username }), // TODO list owned ranks
+          game: game
+        });
+      }
+    };
 
     socket.on("join", function(username) {
       if (socket.joined) return;
@@ -175,19 +191,6 @@ requirejs([ "mustache", "app/gofish" ],
           if (card) {
             socket.hand.take(card);
             socket.hand.sort();
-            if (!fromsock.hand.cards.length) {
-              // Leaves the game empty handed
-              fromsock.emit("status", {
-                message: "You leave the game (but you can stay and chat)",
-                game: game
-              });
-              fromsock.broadcast.emit("status", {
-                message: Mustache.render(
-                  "{{{u}}} leaves the game",
-                  { u: fromsock.username }), // TODO list owned ranks
-                game: game
-              });
-            }
             fromsock.emit("give", {
               rank: card.rank, suit: card.suit,
               to: socket.username
@@ -208,11 +211,14 @@ requirejs([ "mustache", "app/gofish" ],
                 from: fromsock.username, to: socket.username,
                 card: card, pr: pr
             });
-
             socket.emit(
               "status", { message: message, game: game, pr: pr });
             socket.broadcast.emit(
               "status", { message: message, game: game, pr: pr });
+            socket.check_bust(fromsock);
+            if (pr) {
+              socket.check_bust(socket);
+            }
           } else {
             // Go fish
             card = pile.give();
@@ -238,11 +244,11 @@ requirejs([ "mustache", "app/gofish" ],
                   "Lucky fishing trip. {{user}}"+
                   "{{#pr}} pulls the {{{symbol}}} {{name}} rank &#9996;{{/pr}}",
                   { user: socket.username, card: card, pr: pr });
-
                 socket.emit(
                   "status", { message: message, game: game, pr: pr });
                 socket.broadcast.emit(
                   "status", { message: message, game: game, pr: pr });
+                socket.check_bust(socket);
               }
             } else {
               socket.emit(
@@ -284,7 +290,6 @@ requirejs([ "mustache", "app/gofish" ],
           pile.take(card);
         });
         socket.user.ranks.forEach(function(r) {
-          console.log('rank: '+JSON.stringify(r));
           r.cards.forEach(function(card) {
             pile.take(card);
           });

@@ -1,6 +1,5 @@
 .mustache { display: none; }
-.img-center { margin: 0 auto }
-.img-small {max-height: 50%}
+#cards-div button img {max-height: 4em}
 
 /* flex styles based on http://www.bootply.com/oWBElgjtTn */
 html,body {

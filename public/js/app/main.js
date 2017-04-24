@@ -280,12 +280,7 @@ define(function(require) {
       }
       socket.hand.take(card);
       socket.hand.pull_rank(); // if you find one, discard the cards
-      updateHand(socket);
-      if (data.from) {
-        log(Mustache.render(
-          "you get {{rank}} of {{suit}} from {{{from}}}", data));
-      };
-      
+      updateHand(socket);      
     });
     socket.on("give", function(data) {
       var index = socket.hand.cards.findIndex(function(c) {

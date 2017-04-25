@@ -1,6 +1,10 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
 .mustache { display: none; }
-#cards-div button img {max-height: 4em}
-
+.card-modal img {max-height: 16em; }
+.rank-modal img {max-height: 8em; }
 /* flex styles based on http://www.bootply.com/oWBElgjtTn */
 html,body {
 	height:100%;

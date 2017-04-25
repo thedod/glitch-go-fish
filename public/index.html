@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="generator" content=
-  "HTML Tidy for HTML5 for Linux version 5.5.14">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   
   <!-- Bootstrap CSS has to come from a CDN (only way to have the ../fonts assets at glitch) -->
-  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/united/bootstrap.min.css"
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css"
         rel="stylesheet" type="text/css">
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <link href="/css/lib/ie10-viewport-bug-workaround.css" rel=
@@ -25,17 +23,36 @@
   "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fcards-by-last-dino.png?1491920375857">
 </head>
 <body>
+  <nav id="top-bar" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-menu" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Go fish</a>
+      </div>
+      <div id="top-menu" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><ul class="nav navbar-nav" id="cards-dropdown"></ul></li>
+          <li><ul class="nav navbar-nav" id="ranks-dropdown"></ul></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a target="_blank" class="navbar-link"
+                 href="https://github.com/thedod/glitch-go-fish/#readme">
+            About
+            </a>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
   <div class="container">
     <div id="chat-page" class="row flex-row flex-grow">
       <div id="chat-area" class="col-xs-12 flex-col flex-grow">
-        <div class="panel panel-default">
-          <div class="panel-body text-center">
-            <div id="cards-div" class="row">
-              <img class="center-block" alt="loading..."
-                   src="https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fajax-loader.gif?1492981584646">
-            </div>            
-          </div>
-        </div>
         <div class="row flex-row flex-grow">
           <div id="messages-div" class=
                "col-xs-6 flex-col flex-grow">
@@ -43,7 +60,8 @@
           </div>
           <div id="game-div" class="col-xs-6 flex-col">
             <h3>
-              Go Fish
+              <img class="pull-left" style="height:20px; width: auto" alt="Logo"
+                   src="https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fcards-by-last-dino.png?1491920375857">            
               <span class="badge pull-right">
                 <span id="pile-size">0</span>
               </span>
@@ -60,9 +78,31 @@
       </div>
     </div><!-- /#chat-page -->
   </div>
+  <nav id="bottom-bar" class="navbar navbar-inverse navbar-fixed-bottom">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bottom-menu" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#" id="username-brand" class="navbar-brand">
+         <img alt="loading..."
+              src="https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fajax-loader.gif?1492981584646">
+        </a>
+      </div>
+      <div id="bottom-menu" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><p id="game-status" class="navbar-text">Disconnected</p></li>
+        </ul>
+        <ul id="play-bar" class="nav navbar-nav navbar-right"></ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
   
-  <div id="login-modal" class="modal fade" tabindex="-1"
-       role="dialog" data-backdrop="static">
+  <div id="login-modal" class="modal" tabindex="-1" role="dialog"
+       data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -78,91 +118,214 @@
           </div>
         </div>
       </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal-dialog -->        
   </div><!-- /.modal -->
   
-  <div id="card-template" class="mustache">
-    <div class="col-xs-3 col-md-1">
-      <div id="{{ rank }}-of-{{ suit }}-modal" class="modal fade card-modal"
-           tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <h4 class="modal-title">{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})</h4>
-            </div>
-            <div class="modal-body text-center">
-              <img class="img-responsive img-center img-thumbnail" src="{{ src }}" alt="{{ desc }}" />
-            </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-      </div><!-- /.modal -->
+  <div id="bonus-turn-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">Well done</h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-success text-center">
+            <p class="lead">
+              <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
+              You get another turn.
+            </p>
+          </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->        
+  </div><!-- /.modal -->
+  
+  <div id="card-modals"></div>
+  <div id="rank-modals"></div>
 
-      <button type="button" class="btn btn-default card-button" data-toggle="modal"
-              title="{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})"
-              data-target="#{{ rank }}-of-{{ suit }}-modal">
-        <img class="img-responsive" src="{{ src }}" alt="{{ desc }}" />
-      </button>
-    </div>
+  <!-- Begin Mustache templates -->
+  <div id="card-modal-template" class="mustache">
+    <div id="{{ rank }}-of-{{ suit }}-modal" class="modal fade card-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">{{ desc }} <small>{{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }}</small></h4>
+          </div>
+          <div class="modal-body text-center">
+            <img class="img-responsive img-center img-thumbnail" src="{{ src }}" alt="{{ desc }}" />
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
+
+  <div id="rank-modal-template" class="mustache">
+    <div id="{{ name }}-modal" class="modal fade rank-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">{{{ symbol }}} {{ name }}</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <p class="lead">
+                  {{{desc}}}
+                </p>
+                {{#cards}}
+                  <div class="col-xs-6 col-md-6 text-center">
+                    <div cass="thumbnail">
+                      <img class="img-responsive img-center img-thumbnail"
+                           src="{{ src }}" alt="{{ desc }}" />
+                      <div class="caption">
+                        <h5>{{ desc }}</h5>
+                        <h6>{{{ suit_symbol }}}{{ suit }}</h6>
+                      </div>
+                    </div>
+                  </div>
+                {{/cards}}
+              </div>
+            </div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   </div>
   
+  <div id="card-dropdown-template" class="mustache">
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+         aria-expanded="false">Cards <span class="caret"></span></a>
+      <ul class="dropdown-menu" id="cards-menu">
+        {{#cards}}
+          <li>
+            <button type="button" class="btn btn-default form-control card-menu-item" data-toggle="modal"
+                    title="{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})"
+                    data-target="#{{ rank }}-of-{{ suit }}-modal">
+              {{{ rank_symbol }}} {{rank}} / {{{ suit_symbol }}} {{ suit }}
+            </button>
+          </li>
+        {{/cards}}
+      </ul>
+    </li>
+  </div>
+
+  <div id="rank-dropdown-template" class="mustache">
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+         aria-expanded="false">Ranks <span class="caret"></span></a>
+      <ul class="dropdown-menu" id="ranks-menu">
+        {{#ranks}}
+          <li>
+            <button type="button" class="btn btn-default form-control rank-menu-item" data-toggle="modal"
+                    title="{{{ symbol }}} {{ name }}"
+                    data-target="#{{ name }}-modal">
+              {{{ symbol }}} {{name}}
+            </button>
+          </li>
+        {{/ranks}}
+      </ul>
+    </li>
+  </div>
+
   <div id="user-template" class="mustache">
     {{#me}}
       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
     {{/me}}
     {{{ user.name }}}
     {{#playing}}
-      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+      <span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>
     {{/playing}}
     {{#typing}}
       <div class="badge">
         <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
       </div>
     {{/typing}}
-    
     <div class="badge">
       {{#user.ranks}}
         {{{ symbol }}}
       {{/user.ranks}}
       {{#user.hand_size}}<span>{{.}}</span>{{/user.hand_size}}
     </div>
+  </div>
     
+  <div id="play-bar-template" class="mustache">
+    <li><p class="navbar-text">Ask</p></li>
+    <li>
+      <ul class="nav navbar-nav" id="{{_}}play-with">
+        <li class="dropdown active">
+          <a id="{{_}}play-with-field" href="#" class="dropdown-toggle" data-toggle="dropdown"
+             role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+          </a>
+          <ul class="dropdown-menu" id="{{_}}who-select">
+            {{#who}}
+            <li>
+              <a class="drop-select" href="#" data-value="{{ name }}" data-target="#play-with-field">
+                {{ name }}
+              </a>
+            </li>
+            {{/who}}
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><p class="navbar-text">for</p></li>
+    <li>
+      <ul class="nav navbar-nav" id="{{_}}play-rank">
+        <li class="dropdown active">
+          <a id="{{_}}play-rank-field" href="#" class="dropdown-toggle" data-toggle="dropdown"
+             role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+          </a>
+          <ul class="dropdown-menu" id="{{_}}rank-select">
+            {{#ranks}}
+            <li>
+              <a class="drop-select" href="#" data-value="{{ name }}" data-target="#play-rank-field">
+                {{{ symbol }}} {{ name }}
+              </a>
+            </li>
+            {{/ranks}}
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><p class="navbar-text">of</p></li>
+    <li>
+      <ul class="nav navbar-nav" id="{{_}}play-suit">
+        <li class="dropdown active">
+          <a id="{{_}}play-suit-field"
+            href="#" class="dropdown-toggle" data-toggle="dropdown"
+             role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+          </a>
+          <ul class="dropdown-menu" id="{{_}}suit-select">
+            {{#suits}}
+            <li>
+              <a class="drop-select" href="#" data-value="{{ name }}" data-target="#play-suit-field">
+                {{{ symbol }}} {{ name }}
+              </a>
+            </li>
+            {{/suits}}
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <button id="{{_}}ask-button" type="button"
+              class="btn btn-primary navbar-btn" disabled>Ask</button>
+    </li>
+  </div>
 
-  </div>
-  
-  <div id="play-template" class="mustache">
-    <form id="play-controls" class="form-inline" action="javascript:void(0)">
-      <div class="form-group">
-        <label for="#ask-from">ask</label>
-        <select id="ask-from">
-          {{#users}}
-            <option value="{{name}}">{{name}}</option>
-          {{/users}}
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="#ask-rank">for</label>
-        <select id="ask-rank">
-          <option value=""></option>
-          {{#ranks}}
-            <option value="{{name}}">{{{symbol}}} {{name}}</option>
-          {{/ranks}}
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="#ask-suit">of</label>
-        <select id="ask-suit">
-          <option value=""></option>
-          {{#suits}}
-            <option value="{{name}}">{{{symbol}}} {{name}}</option>
-          {{/suits}}
-        </select>
-      </div>
-      <button id="play-button" class="btn btn-default" disabled>Play</button>
-    </form>
-  </div>
+  <!-- End Mustache templates -->
   
   <script data-main="/js/main" src="/js/lib/require.js"></script>
 </body>

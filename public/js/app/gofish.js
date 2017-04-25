@@ -112,6 +112,7 @@ define(function () {
         return {
           name: rank.name,
           symbol: rank.symbol,
+          desc: rank.desc,
           desc_template: rank.desc_template,
           cards: rank.cards.slice() // clone the rank's card array
         }

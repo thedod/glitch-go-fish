@@ -11,15 +11,21 @@ define(function(require) {
     var $window = $(window);
     var $usernameInput = $(".usernameInput");
     var $messagesDiv = $("#messages-div");
-    var $cardsDiv = $("#cards-div");
+    var $cardsDropdown = $("#cards-dropdown");
+    var $ranksDropdown = $("#ranks-dropdown");
+    var $cardModals = $("#card-modals");
+    var $rankModals = $("#rank-modals");
     var $messages = $(".messages");
     var $inputMessage = $(".inputMessage");
     var $loginModal = $("#login-modal");
     var $chatPage = $("#chat-page");
     var $userList = $("#user-list");
-    var cardTemplate = $("#card-template").html();
+    var cardDropdownTemplate = $("#card-dropdown-template").html();
+    var rankDropdownTemplate = $("#rank-dropdown-template").html();
+    var cardModalTemplate = $("#card-modal-template").html();
+    var rankModalTemplate = $("#rank-modal-template").html();
     var userTemplate = $("#user-template").html();
-    var playTemplate = $("#play-template").html();
+    var playBarTemplate = $("#play-bar-template").html();
     var username = "";
     var users = [];
     var turn = null;
@@ -41,55 +47,58 @@ define(function(require) {
         turn = data.game.turn;
         $('#pile-size').text(data.game.pile_size);
       }
-      // is popover shown? http://stackoverflow.com/a/13442857
-      if ($("#cards-div").next('div.popover:visible').length>0) {
-        $("#cards-div").popover('destroy');
-      };
+      
+      $('#username-brand').html(username+'&nbsp;');
+
+      $("#bottom-bar").removeClass('nav-inverse');
+      $("#play-bar").empty();
+      if (turn===null) {
+        $('#game-status').html('Not playing');
+      }
       if (turn!==null) {
+        $('#game-status').html(turn+"'s turn");
         if (turn===username) { // our turn
-          $('#cards-div').popover({
-            trigger: 'manual',
-            animation: false,
-            selector: '#cards-div', // https://github.com/twbs/bootstrap/issues/4215
-            html: true,
-            placement: 'bottom',
-            viewport: { selector: '#chat-area' },
-            title: "Your turn:",
-            content: Mustache.render(
-              playTemplate,{
-                users: users.filter(function(u) {
+          $('#game-status').html("<strong>your</strong> turn");
+          $('#username-brand').append(
+            $('<span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>'));
+          $("#play-bar").html(
+            Mustache.render(
+              playBarTemplate, {
+                who: users.filter(function(u) {
                   return u.hand_size>0 && u.name!==username; }),
                 ranks: socket.deck.ranks,
                 suits: socket.deck.suits
-              })
-          }).on("shown.bs.popover", function() {
-            $('#play-controls select').change(function(e) {
-              $('#play-button').prop(
-                'disabled',
-                !($('#ask-from').val() &&
-                  $('#ask-rank').val() &&
-                  $('#ask-suit').val())
-              );
-            });
-            $('#play-button').click(function() {
-              socket.emit(
-                "ask", {
-                  from: $('#ask-from').val(),
-                  rank: $('#ask-rank').val(),
-                  suit: $('#ask-suit').val()
-                }
-              );
-              log(Mustache.render(
-                "You ask {{{u}}} for {{r}} of {{s}}...", {
-                  u: $('#ask-from').val(),
-                  r: $('#ask-rank').val(),
-                  s: $('#ask-suit').val()
-                }
-              ));
-              $('#cards-div').popover('destroy');
-            });
+              }
+            )
+          );
+          $('.drop-select').click(function() {
+            $($(this).data('target'))
+                .text($(this).data('value'))
+                .data('done', true);
+             $('#ask-button').prop(
+               'disabled',
+               !($('#play-with-field').data('done') &&
+                 $('#play-rank-field').data('done') &&
+                 $('#play-suit-field').data('done')));
           });
-          $('#cards-div').popover('show');
+          $('#ask-button').click(function() {
+            socket.emit(
+              "ask", {
+                from: $('#play-with-field').text(),
+                rank: $('#play-rank-field').text(),
+                suit: $('#play-suit-field').text()
+              }
+            );            
+          });
+          $(this).prop('disabled',true);
+          log(Mustache.render(
+            "You ask {{{u}}} for {{r}} of {{s}}...", {
+              u: $('#play-with-field').text(),
+              r: $('#play-rank-field').text(),
+              s: $('#play-suit-field').text()
+            }
+          ));
+
         }
       }
       $usermap = {};
@@ -116,10 +125,29 @@ define(function(require) {
       }));
     }
     function updateHand(socket) {
-      $cardsDiv.empty();
+      $cardsDropdown.empty();
+      if (socket.hand.cards.length) {
+        $cardsDropdown.append(
+          $(Mustache.render(cardDropdownTemplate, {cards: socket.hand.cards})));
+      }
+      $ranksDropdown.empty();
+      var user = users.find(function(u) {return u.name===socket.username; });
+      if (user && user.ranks.length) {
+        $ranksDropdown.append(
+          $(Mustache.render(rankDropdownTemplate, {ranks: user.ranks})));
+      }
+      $cardModals.empty();
       socket.hand.cards.forEach(function(card) {
-        $cardsDiv.append(
-          $(Mustache.render(cardTemplate, card)));
+        $cardModals.append(
+          $(Mustache.render(cardModalTemplate, card)));
+      });
+      $rankModals.empty();
+      users.find(
+        function(u) {
+          return u.name===username;
+        }).ranks.forEach(function(rank) {
+        $rankModals.append(
+          $(Mustache.render(rankModalTemplate, rank)));
       });
       updateGame();
     }
@@ -127,7 +155,7 @@ define(function(require) {
       username = $usernameInput.val().trim().toLowerCase();
       if (username) {
         $loginModal.modal("hide");
-        $currentInput = $inputMessage.removeAttr("disabled").focus().val("").attr("placeholder", "chat here...");
+        $currentInput = $inputMessage.removeAttr("disabled").val("").attr("placeholder", "chat here...");
         socket.emit("join", username);
       }
     }
@@ -279,8 +307,18 @@ define(function(require) {
         return;
       }
       socket.hand.take(card);
-      socket.hand.pull_rank(); // if you find one, discard the cards
-      updateHand(socket);      
+      var pr=socket.hand.pull_rank();
+      // ugly patch to update menu before next status
+      if (pr) {
+        users.find(
+          function(u){
+            return u.name===socket.username
+          }).ranks.push(pr);
+      }
+      updateHand(socket);
+      if (data.from) {
+        $('#bonus-turn-modal').modal('show');
+      }
     });
     socket.on("give", function(data) {
       var index = socket.hand.cards.findIndex(function(c) {

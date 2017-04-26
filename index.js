@@ -15,7 +15,7 @@ requirejs.config({
 
 requirejs([ "mustache", "app/gofish" ],
           function(Mustache, gofish) {
-  var port = process.env.PORT || 3e3;
+  var port = process.env.PORT || 3e3; // I kinda guess who did *that*
   var deck = new gofish.CardDeck(require(__dirname + "/public/deck.json"));
   var num_suits = deck.suits.length;
   var pile = new gofish.CardHand(deck, true);
@@ -86,6 +86,28 @@ requirejs([ "mustache", "app/gofish" ],
             { u: sock.username }), // TODO list owned ranks
           game: game
         });
+        if (game.turn===null) { // game over
+          var scores = game.users.map(function (u) {
+            return {
+              name: u.name,
+              ranks: u.ranks,
+              hand_size: u.hand_size,
+              score: 2*deck.suits.length*u.ranks.length - u.hand_size
+            };
+          });
+          if (scores) {
+            scores.sort(function(a,b) { return b.score - a.score; });
+          }
+          pile = new gofish.CardHand(deck, true);
+          for (var u in game.username2socket) {
+            username2socket[u].hand.clear();
+            u.ranks = [];
+          };
+          sock.update_game();
+          
+          sock.emit('game over', {scores: scores, game: game});
+          sock.broadcast.emit('game over', {scores: scores, game: game});
+        }
       }
     };
 

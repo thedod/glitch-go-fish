@@ -7,7 +7,11 @@ define(function(require) {
   $(function() {
     var FADE_TIME = 150;
     var TYPING_TIMER_LENGTH = 400;
-    var COLORS = [ "#e21400", "#91580f", "#f8a700", "#f78b00", "#58dc00", "#287b00", "#a8f07a", "#4ae8c4", "#3b88eb", "#3824aa", "#a700ff", "#d300e7" ];
+    var COLORS = [ 
+      "#58dc00", "#287b00", "#a8f07a", "#4ae8c4",
+      "#3b88eb", "#3824aa", "#a700ff", "#d300e7",
+      "#e21400", "#91580f", "#f8a700", "#f78b00"
+    ];
     var $window = $(window);
     var $usernameInput = $(".usernameInput");
     var $messagesDiv = $("#messages-div");
@@ -24,8 +28,10 @@ define(function(require) {
     var rankDropdownTemplate = $("#rank-dropdown-template").html();
     var cardModalTemplate = $("#card-modal-template").html();
     var rankModalTemplate = $("#rank-modal-template").html();
+    var scoreTemplate = $("#score-template").html();    
     var userTemplate = $("#user-template").html();
     var playBarTemplate = $("#play-bar-template").html();
+    var GameOvTemplate = $("#play-bar-template").html();
     var username = "";
     var users = [];
     var turn = null;
@@ -87,18 +93,18 @@ define(function(require) {
                 from: $('#play-with-field').text(),
                 rank: $('#play-rank-field').text(),
                 suit: $('#play-suit-field').text()
-              }
-            );            
+            });            
+            $(this).prop('disabled',true);
+            // give phones feedback that something
+            // happened (menu might hide entire display)
+            $('.collapse').collapse('hide');
+            log(Mustache.render(
+              "You ask {{{u}}} for {{r}} of {{s}}...", {
+                u: $('#play-with-field').text(),
+                r: $('#play-rank-field').text(),
+                s: $('#play-suit-field').text()
+            }));
           });
-          $(this).prop('disabled',true);
-          log(Mustache.render(
-            "You ask {{{u}}} for {{r}} of {{s}}...", {
-              u: $('#play-with-field').text(),
-              r: $('#play-rank-field').text(),
-              s: $('#play-suit-field').text()
-            }
-          ));
-
         }
       }
       $usermap = {};
@@ -299,6 +305,12 @@ define(function(require) {
       log(data.message);
       updateGame(data);
     });
+    socket.on("game over", function(data) {
+      updateGame(data);
+      $('#score').html(Mustache.render(
+        scoreTemplate, data));
+      $('#game-over-modal').modal('show');
+    });
     socket.on("take", function(data) {
       var card = socket.hand.deck.getCard(
         data.rank, data.suit);
@@ -308,17 +320,14 @@ define(function(require) {
       }
       socket.hand.take(card);
       var pr=socket.hand.pull_rank();
-      // ugly patch to update menu before next status
       if (pr) {
+        // ugly patch to update menu before next status
         users.find(
           function(u){
             return u.name===socket.username
           }).ranks.push(pr);
       }
       updateHand(socket);
-      if (data.from) {
-        $('#bonus-turn-modal').modal('show');
-      }
     });
     socket.on("give", function(data) {
       var index = socket.hand.cards.findIndex(function(c) {

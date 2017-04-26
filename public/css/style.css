@@ -58,8 +58,11 @@ html,body {
     
 #messages-div {
   font-size: 110%;
-  overflow-y: scroll;
   background: black;
+}
+
+#messages-div, #game-div {
+  overflow-y: scroll;  
 }
 
 .inputMessage {
@@ -87,4 +90,3 @@ html,body {
     vertical-align: middle;
     float: none;
 }
-

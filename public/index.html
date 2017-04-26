@@ -55,14 +55,14 @@
       <div id="chat-area" class="col-xs-12 flex-col flex-grow">
         <div class="row flex-row flex-grow">
           <div id="messages-div" class=
-               "col-xs-6 flex-col flex-grow">
+               "col-xs-6 flex-col flex-grow text-info">
             <ul class="messages list-unstyled"></ul>
           </div>
           <div id="game-div" class="col-xs-6 flex-col">
             <h3>
               <img class="pull-left" style="height:20px; width: auto" alt="Logo"
                    src="https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fcards-by-last-dino.png?1491920375857">            
-              <span class="badge pull-right">
+              <span class="label label-default pull-right">
                 <span id="pile-size">0</span>
               </span>
             </h3>
@@ -121,20 +121,33 @@
     </div><!-- /.modal-dialog -->        
   </div><!-- /.modal -->
   
-  <div id="bonus-turn-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div id="game-over-modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title">Well done</h4>
+          <h4 class="modal-title">Game over <small>it takes 2 to go fish</small></h4>
         </div>
         <div class="modal-body">
           <div class="alert alert-success text-center">
+            <div class="page-header">
+              <h1>
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                Game over. Well done.   
+              </h1>
+            </div>
+            <dl class="dl-horizontal" id="score"></dl>
             <p class="lead">
-              <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
-              You get another turn.
+              In order to join a new game, refresh the page
+              <small>
+                (this makes you leave the room, join it again,
+                and draw new cards from the fresh pile).
+              </small>
+            </p>
+            <p>
+              You can also stay here and chat as a non-player.
             </p>
           </div>
         </div>
@@ -181,13 +194,16 @@
                   {{{desc}}}
                 </p>
                 {{#cards}}
-                  <div class="col-xs-6 col-md-6 text-center">
+                  <div class="col-xs-6 col-md-6 text-center well">
                     <div cass="thumbnail">
                       <img class="img-responsive img-center img-thumbnail"
                            src="{{ src }}" alt="{{ desc }}" />
                       <div class="caption">
-                        <h5>{{ desc }}</h5>
-                        <h6>{{{ suit_symbol }}}{{ suit }}</h6>
+                        <h5>
+                          <small>{{{ suit_symbol }}}{{ suit }}</small><br>
+                          {{ desc }}
+                        </h5>
+                        <h6></h6>
                       </div>
                     </div>
                   </div>
@@ -237,6 +253,12 @@
   </div>
 
   <div id="user-template" class="mustache">
+    <div class="label label-default pull-right">
+      {{#user.ranks}}
+        <abbr title="{{ name }}">{{{ symbol }}}</abbr>
+      {{/user.ranks}}
+      {{#user.hand_size}}<span>{{.}}</span>{{/user.hand_size}}
+    </div>
     {{#me}}
       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
     {{/me}}
@@ -245,18 +267,10 @@
       <span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>
     {{/playing}}
     {{#typing}}
-      <div class="badge">
-        <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
-      </div>
+      <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
     {{/typing}}
-    <div class="badge">
-      {{#user.ranks}}
-        {{{ symbol }}}
-      {{/user.ranks}}
-      {{#user.hand_size}}<span>{{.}}</span>{{/user.hand_size}}
-    </div>
   </div>
-    
+  
   <div id="play-bar-template" class="mustache">
     <li><p class="navbar-text">Ask</p></li>
     <li>
@@ -321,8 +335,21 @@
     </li>
     <li>
       <button id="{{_}}ask-button" type="button"
-              class="btn btn-primary navbar-btn" disabled>Ask</button>
+              class="btn btn-primary navbar-btn" disabled>Please</button>
     </li>
+  </div>
+  <div id="score-template" class="mustace">
+    {{#scores}}
+    <dt>{{ name }}</dt>
+    <dd>
+      {{#hand_size}}{{.}} cards left{{/hand_size}}
+      <ul class="list-unstyled">
+      {{#ranks}}
+        <li>{{{ symbol }}} {{ name }}</li>
+      {{/ranks}}
+      </ul>
+    </dd>
+    {{/scores}}
   </div>
 
   <!-- End Mustache templates -->

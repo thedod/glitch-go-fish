@@ -18,34 +18,34 @@ The deck is based on the [Swiss](https://en.wikipedia.org/wiki/Swiss_playing_car
 ### How to Play
 
 #### Players vs Spectators
-* When you choose a nickname and enter the game, you draw 4 cards form the
+* When you choose a nickname and enter the game, you draw 4 cards from the
   pile and become a *player*.
 
 * If there are less than 4 cards in the pile, you get no cards and remain
-  a *spectator* (you can chat, and watch text reports about game moves).
+  a *spectator* (you can chat and watch text reports about game moves).
   
 * Players who no longer hold cards (either by giving the last card to
-  someone else, or by holding 3 cards and then pulling a rank) become a
-  spectators, but retain the ranks they've pulles (see below).
+  someone else, or by holding 3 cards and then pulling a rank [see below]),
+  become spectators, but retain the ranks they've pulles.
   
-* Players who leave (by closing or reloading the we page) return all cards
+* Players who leave (by closing or reloading the web page) return all cards
   (including the ones in the ranks they've pulled) to the pile.
   
-* The game ends when there are less than 2 players. The scores are presented,
+* The game ends when there are less than 2 players: The scores are presented,
   and all players return their cards and ranks to the pile and become
-  spectators. The ones who want to play another game can simply reload the
+  spectators. Those who want to play another game can simply reload the
   page and join again.
 
 #### Goal
   
 * When a player gets all 4 suits of the same rank (this is called  *pulling
-  a rank*), the player is no longer holding those cards, and that rank is
+  a rank*), the player is no longer holding those cards, but the rank is
   considered "owned" by that player.
   
-* The goal of the game is to pull as many ranks as possible
+* The goal of the game is to pull as many ranks as possible.
 
-* AS a tie breaker (e.g. if 2 players have pulled one rank each),
-  the player holding *less* cards gets a higher score).
+* AS a tie breaker (e.g. if 2 players have pulled one rank each):
+  the player holding *less* cards gets a higher score.
 
 #### Moves
 * Players (when it's their turn) can ask a fellow player for a specific
@@ -53,10 +53,11 @@ The deck is based on the [Swiss](https://en.wikipedia.org/wiki/Swiss_playing_car
   * If the other player holds that card, the asker gets it, and gets another
     turn.
   * If not &mdash; the asker has to *go fish* (draw a card from the pile,
-    unless it's empty), and the turn goes to the next player.
-    
-Once in a while, a player receiving a card (from another player or the pile) would pull a rank, and eventually more and more empty-handed players will
-become spectators, until there are less than 2 left, and the game is over.
+    unless it's empty).
+  * Once in a while, a player receiving a card (from another player or the
+    pile) would pull a rank.
+  * Eventually more and more empty-handed players will become spectators,
+    until there are less than 2 left, and the game is over.
 
 Play, remix, and be merry.
 

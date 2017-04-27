@@ -344,7 +344,7 @@
     {{#scores}}
     <dt>{{ name }}</dt>
     <dd>
-      {{#hand_size}}{{.}} cards left{{/hand_size}}
+      {{#hand_size}}<span class="text-danger">{{.}} cards left</span>{{/hand_size}}
       <ul class="list-unstyled">
       {{#ranks}}
         <li>{{{ symbol }}} {{ name }}</li>

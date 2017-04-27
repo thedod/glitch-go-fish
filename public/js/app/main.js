@@ -59,7 +59,7 @@ define(function(require) {
       $("#bottom-bar").removeClass('nav-inverse');
       $("#play-bar").empty();
       if (turn===null) {
-        $('#game-status').html('Not playing');
+        $('#game-status').html('Waiting for players');
       }
       if (turn!==null) {
         $('#game-status').html(turn+"'s turn");
@@ -108,7 +108,7 @@ define(function(require) {
         }
       }
       $usermap = {};
-      users.forEach(function(user) { // also non-players
+      users.forEach(function(user) {
         $usermap[user.name] = $("<li/>")
           .addClass("list-group-item");
         updateUser(user);

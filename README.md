@@ -54,10 +54,14 @@ The deck is based on the [Swiss](https://en.wikipedia.org/wiki/Swiss_playing_car
     turn.
   * If not &mdash; the asker has to *go fish* (draw a card from the pile,
     unless it's empty).
+    
 * Once in a while, a player receiving a card (from another player or the
   pile) would pull a rank.
-* Eventually more and more empty-handed players will become spectators,
+  
+* Eventually, more and more empty-handed players will become spectators,
   until there are less than 2 left, and the game is over.
+
+![game over screenshot](https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fgame-over.png?1493329682733)
 
 Play, remix, and be merry.
 

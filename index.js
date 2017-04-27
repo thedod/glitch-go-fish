@@ -15,7 +15,7 @@ requirejs.config({
 
 requirejs([ "mustache", "app/gofish" ],
           function(Mustache, gofish) {
-  var port = process.env.PORT || 3e3; // I kinda guess who did *that*
+  var port = process.env.PORT || 3000;
   var deck = new gofish.CardDeck(require(__dirname + "/public/deck.json"));
   var num_suits = deck.suits.length;
   var pile = new gofish.CardHand(deck, true);
@@ -99,9 +99,9 @@ requirejs([ "mustache", "app/gofish" ],
             scores.sort(function(a,b) { return b.score - a.score; });
           }
           pile = new gofish.CardHand(deck, true);
-          for (var u in game.username2socket) {
+          for (var u in username2socket) {
             username2socket[u].hand.clear();
-            u.ranks = [];
+            username2socket[u].user.ranks = [];
           };
           sock.update_game();
           

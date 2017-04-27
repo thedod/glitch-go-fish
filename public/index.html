@@ -131,21 +131,22 @@
           <h4 class="modal-title">Game over <small>it takes 2 to go fish</small></h4>
         </div>
         <div class="modal-body">
-          <div class="alert alert-success text-center">
             <div class="page-header">
-              <h1>
+              <h3>
                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                 Game over. Well done.   
-              </h1>
+              </h3>
             </div>
-            <dl class="dl-horizontal" id="score"></dl>
-            <p class="lead">
-              In order to join a new game, refresh the page
+            <div class="well text-center">
+              <dl class="dl-horizontal" id="score"></dl>              
+            </div>
+            <h4>
+              In order to join a new game, refresh the page<br>
               <small>
                 (this makes you leave the room, join it again,
-                and draw new cards from the fresh pile).
+                and draw new cards from a fresh pile).
               </small>
-            </p>
+            </h4>
             <p>
               You can also stay here and chat as a non-player.
             </p>
@@ -258,6 +259,7 @@
         <abbr title="{{ name }}">{{{ symbol }}}</abbr>
       {{/user.ranks}}
       {{#user.hand_size}}<span>{{.}}</span>{{/user.hand_size}}
+      {{^user.hand_size}}&nbsp;{{/user.hand_size}}
     </div>
     {{#me}}
       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -338,7 +340,8 @@
               class="btn btn-primary navbar-btn" disabled>Please</button>
     </li>
   </div>
-  <div id="score-template" class="mustace">
+  
+  <div id="score-template" class="mustache">
     {{#scores}}
     <dt>{{ name }}</dt>
     <dd>

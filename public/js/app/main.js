@@ -306,6 +306,7 @@ define(function(require) {
       updateGame(data);
     });
     socket.on("game over", function(data) {
+      socket.hand.clear();
       updateGame(data);
       $('#score').html(Mustache.render(
         scoreTemplate, data));

@@ -39,7 +39,6 @@ define(function () {
         suit.by_rank[rank.name] = card;
       }
     };
-    this.clear = function() { this.cards = [] };
     this.getRank = function(r) { return this.rank_by_name[r]; };
     this.getSuit = function(s) { return this.suit_by_name[s]; };
     this.getCard = function(r,s) { return this.rank_by_name[r].by_suit[s]};
@@ -66,6 +65,7 @@ define(function () {
       this.cards = [];
     };
     
+    this.clear = function() { this.cards = []; };
     this.give = function() { return this.cards && this.cards.pop(); };
     this.take = function(card) { this.cards.unshift(card); };
     this.ask = function(rank, suit, is_taking) {

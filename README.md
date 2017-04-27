@@ -26,7 +26,7 @@ The deck is based on the [Swiss](https://en.wikipedia.org/wiki/Swiss_playing_car
   
 * Players who no longer hold cards (either by giving the last card to
   someone else, or by holding 3 cards and then pulling a rank [see below]),
-  become spectators, but retain the ranks they've pulles.
+  become spectators, but retain the ranks they've pulled.
   
 * Players who leave (by closing or reloading the web page) return all cards
   (including the ones in the ranks they've pulled) to the pile.
@@ -54,10 +54,10 @@ The deck is based on the [Swiss](https://en.wikipedia.org/wiki/Swiss_playing_car
     turn.
   * If not &mdash; the asker has to *go fish* (draw a card from the pile,
     unless it's empty).
-  * Once in a while, a player receiving a card (from another player or the
-    pile) would pull a rank.
-  * Eventually more and more empty-handed players will become spectators,
-    until there are less than 2 left, and the game is over.
+* Once in a while, a player receiving a card (from another player or the
+  pile) would pull a rank.
+* Eventually more and more empty-handed players will become spectators,
+  until there are less than 2 left, and the game is over.
 
 Play, remix, and be merry.
 

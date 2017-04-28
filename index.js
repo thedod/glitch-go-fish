@@ -27,6 +27,10 @@ requirejs([ "mustache", "app/gofish" ],
   };
   var usermap = {};
   var socketmap = {};
+  var turn_timer = null;
+  
+  
+  
   io.on("connection", function(socket) {
     socket.joined = false;
     socket.hand = new gofish.CardHand(deck);
@@ -48,6 +52,22 @@ requirejs([ "mustache", "app/gofish" ],
         }
       });
     };
+    socket.set_turn_timer = function() {
+      if (turn_timer) {
+        clearTimeout(turn_timer);
+      };
+      turn_timer = setTimeout(function() {
+        var turn = game.turn;
+        if (turn) {
+          var message = Mustache.render(
+            "We can't wait forever for {{{turn}}} to make a move.",
+            {turn: turn});
+          socket.emit("status", { message: message, game: game });
+          socket.broadcast.emit("status", { message: message, game: game });
+          socket.next_turn();
+        }
+      },120000);
+    }
     socket.next_turn = function() {
       var players = game.users.filter(function(u) {
         return u.hand_size>0;
@@ -70,6 +90,7 @@ requirejs([ "mustache", "app/gofish" ],
           "status", { message: message, game: game });
         socket.broadcast.emit(
           "status", { message: message, game: game });
+        socket.set_turn_timer();
       }
     };
     socket.check_bust = function(sock) {
@@ -210,6 +231,9 @@ requirejs([ "mustache", "app/gofish" ],
     });
     socket.on("ask", function(data) {
       if (game.turn===socket.username) {
+        if (turn_timer) {
+          clearTimeout(turn_timer);
+        }
         var fromsock = socketmap[data.from];
         if (fromsock) {
           socket.broadcast.emit("status", {
@@ -244,12 +268,17 @@ requirejs([ "mustache", "app/gofish" ],
                 card: card, pr: pr
             });
             socket.emit(
-              "status", { message: message, game: game, pr: pr });
+              "status", { message: message, game: game });
             socket.broadcast.emit(
-              "status", { message: message, game: game, pr: pr });
+              "status", { message: message, game: game });
             socket.check_bust(fromsock);
             if (pr) {
               socket.check_bust(socket);
+            }
+            if (game.turn===socket.username) {
+              socket.set_turn_timer();
+              socket.emit(
+                "status", { message: "You get another turn &#9996;", game: game });
             }
           } else {
             // Go fish

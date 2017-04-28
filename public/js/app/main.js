@@ -277,8 +277,8 @@ define(function(require) {
       // nothing so far
     });
     socket.on("disconnect", function() {
-      // give server 15 seconds to restart ;)
-      setTimeout("document.location.reload()", 15000);
+      alert('Disconnectd 😟');
+      document.location.reload();
     });
 
     socket.on("joined", function(data) {

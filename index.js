@@ -149,6 +149,17 @@ requirejs([ "mustache", "app/gofish" ],
             suit: card.suit
           })
         });
+        // make sure we weren't dealt a full rank
+        var pr = socket.hand.pull_rank();
+        if (pr) {
+          var trade_in = pr.cards.pop();
+          pr.cards.forEach(function(c) {
+            socket.hand.take(c);
+          });
+          socket.hand.take(pile.give());
+          pile.take(trade_in);
+          pile.shuffle();
+        }
         socket.update_game();
         socket.user.hand_size = socket.hand.cards.length;
         socket.emit("status", {

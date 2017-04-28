@@ -24,7 +24,6 @@ requirejs([ "mustache", "app/gofish" ],
     pile_size: pile.cards.length,
     turn: null, // it's users[turn]'s turn (unless null)
     users: [],
-    free_ranks: []
   };
   var usermap = {};
   var socketmap = {};

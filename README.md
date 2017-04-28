@@ -78,5 +78,8 @@ Play, remix, and be merry.
   [images](https://openclipart.org/detail/175474/swiss-card-deck-xvii)
   by [mariotomo](https://openclipart.org/user-detail/mariotomo).
 
+* Playing Cards [icon](https://openclipart.org/detail/170641/playing-cards)
+  by [Last-Dino](https://openclipart.org/user-detail/Last-Dino).
+  
 * Thanks to the [Glitch](https://glitch.com/) team for making this so
   easy to happen.

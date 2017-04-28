@@ -23,7 +23,8 @@ requirejs([ "mustache", "app/gofish" ],
   var game = {
     pile_size: pile.cards.length,
     turn: null, // it's users[turn]'s turn (unless null)
-    users: []
+    users: [],
+    free_ranks: []
   };
   var usermap = {};
   var socketmap = {};

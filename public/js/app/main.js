@@ -34,6 +34,7 @@ define(function(require) {
     var GameOvTemplate = $("#play-bar-template").html();
     var username = "";
     var users = [];
+    var free_ranks = [];
     var usermap = {};
     var turn = null;
     var $usermap = {};
@@ -67,6 +68,20 @@ define(function(require) {
       if (turn!==null) {
         $('#game-status').html(turn+"'s turn");
         if (turn===username) { // our turn
+          var rankmap = {};
+          socket.deck.ranks.forEach(function(r) {
+            rankmap[r.name] = r;
+          });
+          users.forEach(function(u) {
+            u.ranks.forEach(function(rank) {
+              delete rankmap[rank.name];
+            });
+          });
+          
+          var free_ranks = socket.deck.ranks.filter(function (r) {            
+            return r.name in rankmap;
+          });
+
           $('#game-status').html("<strong>your</strong> turn");
           $('#username-brand').append(
             $('<span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>'));
@@ -75,7 +90,7 @@ define(function(require) {
               playBarTemplate, {
                 who: users.filter(function(u) {
                   return u.hand_size>0 && u.name!==username; }),
-                ranks: socket.deck.ranks,
+                ranks: free_ranks,
                 suits: socket.deck.suits
               }
             )

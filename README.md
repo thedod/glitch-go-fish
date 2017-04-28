@@ -6,7 +6,6 @@ Click [here](https://go-fish.glitch.me/) to play.
 
 ### The card deck
 
-
 * The ranks (equivalents of Ace, King, etc.) are `Industy`, `Royalty`,
 `Ministry`, and `Peasantry`.
 

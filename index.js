@@ -161,6 +161,7 @@ requirejs([ "mustache", "app/gofish" ],
         username: username,
         game: game
       });
+      console.log(username+" joins");
       if (pile.cards.length>=num_suits) {
         deck.suits.forEach(function(ignored) {
           var card = pile.give();
@@ -334,6 +335,7 @@ requirejs([ "mustache", "app/gofish" ],
     });
     socket.on("disconnect", function() {
       if (socket.joined) {
+        console.log(socket.username+" leaves");
         var i = game.users.indexOf(socket.user);
         if (i >= 0) {
           game.users.splice(i, 1);

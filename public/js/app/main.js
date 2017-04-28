@@ -323,8 +323,12 @@ define(function(require) {
     socket.on("game over", function(data) {
       socket.hand.clear();
       updateGame(data);
-      $('#score').html(Mustache.render(
-        scoreTemplate, data));
+      var score_html = Mustache.render(
+        scoreTemplate, data);
+      log('Game over. Refresh browser to play again.');
+      log(score_html);
+      
+      $('#score').html(score_html);
       $('#game-over-modal').modal('show');
     });
     socket.on("take", function(data) {

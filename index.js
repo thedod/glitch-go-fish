@@ -98,12 +98,12 @@ requirejs([ "mustache", "app/gofish" ],
         sock.next_turn();
         sock.update_game();
         sock.emit("status", {
-          message: "You're no longer playing (but you can stay and chat)",
+          message: "You're out of cards.",
           game: game
         });
         sock.broadcast.emit("status", {
           message: Mustache.render(
-            "{{{u}}} is no longer playing",
+            "{{{u}}} is out of cards.",
             { u: sock.username }), // TODO list owned ranks
           game: game
         });

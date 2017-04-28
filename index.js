@@ -25,8 +25,8 @@ requirejs([ "mustache", "app/gofish" ],
     turn: null, // it's users[turn]'s turn (unless null)
     users: []
   };
-  var username2socket = [];
-
+  var usermap = {};
+  var socketmap = {};
   io.on("connection", function(socket) {
     socket.joined = false;
     socket.hand = new gofish.CardHand(deck);
@@ -39,7 +39,7 @@ requirejs([ "mustache", "app/gofish" ],
     socket.update_game = function() {
       game.pile_size = pile.cards.length;
       game.users.forEach(function(u) {
-        var s = username2socket[u.name];
+        var s = socketmap[u.name];
         if (s) {
           u.hand_size = s.hand.cards.length;
         } else {
@@ -99,9 +99,9 @@ requirejs([ "mustache", "app/gofish" ],
             scores.sort(function(a,b) { return b.score - a.score; });
           }
           pile = new gofish.CardHand(deck, true);
-          for (var u in username2socket) {
-            username2socket[u].hand.clear();
-            username2socket[u].user.ranks = [];
+          for (var u in socketmap) {
+            socketmap[u].hand.clear();
+            socketmap[u].user.ranks = [];
           };
           sock.update_game();
           
@@ -115,22 +115,21 @@ requirejs([ "mustache", "app/gofish" ],
       if (socket.joined) return;
       username = socket.sanitize(username.trim().toLowerCase());
       if (!username) return;
-      if (game.users.find(
-        function (user) { return user.name===username;})
-      ) {
+      if (usermap[username]) {
         socket.emit(
           "username taken", { username: username });
         return;
       }
 
       socket.username = username;
-      username2socket[username] = socket;
+      socketmap[username] = socket;
       socket.hand = new gofish.CardHand(deck);
       socket.user = {
         name: username,
         hand_size: socket.hand.cards.length,
         ranks: []
       };
+      usermap[username] = socket.user;
       game.users.push(socket.user);
       socket.joined = true;
       socket.emit("joined", {
@@ -200,7 +199,7 @@ requirejs([ "mustache", "app/gofish" ],
     });
     socket.on("ask", function(data) {
       if (game.turn===socket.username) {
-        var fromsock = username2socket[data.from];
+        var fromsock = socketmap[data.from];
         if (fromsock) {
           socket.broadcast.emit("status", {
             message: Mustache.render(
@@ -317,8 +316,15 @@ requirejs([ "mustache", "app/gofish" ],
           });
         });
         pile.shuffle();
-        if (username2socket[socket.username]) {
-          delete username2socket[socket.username];
+        if (usermap[socket.username]) {
+          delete usermap[socket.username];
+        } else {
+          console.log(
+            "Found no usermap entry when "+socket.username+" was leaving");
+        }
+
+        if (socketmap[socket.username]) {
+          delete socketmap[socket.username];
         } else {
           console.log(
             "Found no socket when "+socket.username+" was leaving");

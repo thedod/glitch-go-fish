@@ -45,7 +45,7 @@ The deck is based on the [Swiss](https://en.wikipedia.org/wiki/Swiss_playing_car
 * The goal of the game is to pull as many ranks as possible.
 
 * As a tie breaker (e.g. if 2 players have pulled one rank each):
-  the player holding *less* cards gets a higher score.
+  the player holding any cards (there can only be one) gets a lower score.
 
 #### Moves
 * Players (when it's their turn) can ask a fellow player for a specific

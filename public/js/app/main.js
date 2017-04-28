@@ -34,6 +34,7 @@ define(function(require) {
     var GameOvTemplate = $("#play-bar-template").html();
     var username = "";
     var users = [];
+    var usermap = {};
     var turn = null;
     var $usermap = {};
     var typingmap = {};
@@ -50,6 +51,8 @@ define(function(require) {
     function updateGame(data) {
       if (data) {
         users = data.game.users;
+        usermap = {};
+        users.forEach(function(u) { usermap[u.name] = u; });
         turn = data.game.turn;
         $('#pile-size').text(data.game.pile_size);
       }
@@ -137,7 +140,7 @@ define(function(require) {
           $(Mustache.render(cardDropdownTemplate, {cards: socket.hand.cards})));
       }
       $ranksDropdown.empty();
-      var user = users.find(function(u) {return u.name===socket.username; });
+      var user = usermap[socket.username];
       if (user && user.ranks.length) {
         $ranksDropdown.append(
           $(Mustache.render(rankDropdownTemplate, {ranks: user.ranks})));
@@ -148,10 +151,7 @@ define(function(require) {
           $(Mustache.render(cardModalTemplate, card)));
       });
       $rankModals.empty();
-      users.find(
-        function(u) {
-          return u.name===username;
-        }).ranks.forEach(function(rank) {
+      usermap[username].ranks.forEach(function(rank) {
         $rankModals.append(
           $(Mustache.render(rankModalTemplate, rank)));
       });
@@ -323,10 +323,7 @@ define(function(require) {
       var pr=socket.hand.pull_rank();
       if (pr) {
         // ugly patch to update menu before next status
-        users.find(
-          function(u){
-            return u.name===socket.username
-          }).ranks.push(pr);
+        usermap[socket.username].ranks.push(pr);
       }
       updateHand(socket);
     });

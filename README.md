@@ -58,8 +58,8 @@ The deck is based on the [Swiss](https://en.wikipedia.org/wiki/Swiss_playing_car
     unless it's empty).
     
 * Once in a while, a player receiving a card (from another player or the
-  pile) would pull a rank. This may lead to either or both players to run
-  out of cards and become spectators.
+  pile) would pull a rank. This may lead to either or both players running
+  out of cards and becoming spectators.
   
 * Eventually, more and more empty-handed players would become spectators,
   until there are less than 2 left, and the game is over.

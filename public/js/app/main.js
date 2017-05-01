@@ -28,10 +28,18 @@ define(function(require) {
     var rankDropdownTemplate = $("#rank-dropdown-template").html();
     var cardModalTemplate = $("#card-modal-template").html();
     var rankModalTemplate = $("#rank-modal-template").html();
-    var scoreTemplate = $("#score-template").html();    
     var userTemplate = $("#user-template").html();
     var playBarTemplate = $("#play-bar-template").html();
     var GameOvTemplate = $("#play-bar-template").html();
+    var scoreTemplate = $("#score-template").html();    
+    [
+      cardDropdownTemplate, rankDropdownTemplate,
+      cardModalTemplate, rankModalTemplate,
+      userTemplate, playBarTemplate,
+      GameOvTemplate, scoreTemplate
+    ].forEach(function(t) {
+      Mustache.parse(t); // optimizes rendering
+    })
     var username = "";
     var users = [];
     var free_ranks = [];

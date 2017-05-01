@@ -158,7 +158,20 @@
   <div id="card-modals"></div>
   <div id="rank-modals"></div>
 
-  <!-- Begin Mustache templates -->
+  <!-- Begin Mustache templates
+    Mustache documentation recommends adding templates to
+    html gile as scripts:
+    https://github.com/janl/mustache.js#include-templates
+    The problem with this approach is that syntax-aware editors
+    don't highlight, properly indent, etc. the code.
+    To overcome this, we use templates as div.mustache elements
+    (hidden in CSS).
+    The problem with this approach is id collision in case of
+    singletons (e.g #items, as opposed to #item-{{ n }}).
+    The tweak arround this is to add a dummy var to such an id
+    e.g. <div id="{{_}}items" ...>: {{_}} evaluates to the value
+    of the uninitialized variable _ (i.e. an empty string).
+  -->
   <div id="card-modal-template" class="mustache">
     <div id="{{ rank }}-of-{{ suit }}-modal" class="modal fade card-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">

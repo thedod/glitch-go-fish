@@ -81,8 +81,8 @@ Play, remix, and be merry.
   [images](https://openclipart.org/detail/175474/swiss-card-deck-xvii)
   by [mariotomo](https://openclipart.org/user-detail/mariotomo).
 
-* Playing Cards [icon](https://openclipart.org/detail/170641/playing-cards)
-  by [Last-Dino](https://openclipart.org/user-detail/Last-Dino).
+* [Logo](https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fgo-fish.png?1493734470270)
+is based on art by [Last-Dino](https://openclipart.org/detail/170641/playing-cards) and [johnny_automatic](https://openclipart.org/detail/524/jumping-fish).
   
 * Thanks to the [Glitch](https://glitch.com/) team for making this so
   easy to happen.

@@ -1,6 +1,27 @@
+@font-face {
+  font-family: alef-emoji;
+
+  /* Fonts for text outside emoji blocks */
+  src:
+       url(https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Femojione-svg.woff2?1494102761093) format('woff2'),
+       url(https://fonts.gstatic.com/s/alef/v8/YSq5FGaxu3aLqDeLnbayWg.woff2) format('woff2'),
+       url(https://fonts.gstatic.com/s/alef/v8/PgKMCGPCV9cpBC0J2OLAhg.woff2) format('woff2'),
+       local(Arial);
+}
+@font-face {
+  font-family: alef-digits;
+  src:
+       url(https://fonts.gstatic.com/s/alef/v8/PgKMCGPCV9cpBC0J2OLAhg.woff2) format('woff2'),
+       local(Arial);
+  unicode-range: U+30-39;
+}
 body {
   padding-top: 70px;
   padding-bottom: 70px;
+}
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
+.btn, .navbar, .label {
+  font-family: 'alef-digits', 'alef-emoji', sans-serif;
 }
 .mustache { display: none; }
 .card-modal img {max-height: 16em; }
@@ -10,6 +31,8 @@ html,body {
 	height:100%;
   max-height:100%;
 }
+.rtl { direction: rtl; }
+.ltr { direction: ltr; }
 
 .container, .row {
 	height:100%;

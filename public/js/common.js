@@ -16,8 +16,7 @@ requirejs.config({
     },
     shim: {
         "bootstrap": {
-          deps: ["jquery"],
-          exports: "$.fn.popover"
+          deps: ["jquery"]
         }
     },
 });

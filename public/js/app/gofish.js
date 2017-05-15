@@ -1,8 +1,17 @@
 define(function () {
+  var hash_id = function(s) { // http://stackoverflow.com/a/7616484
+    var hash = 0, i, chr;
+    if (s.length === 0) return hash;
+    for (i = 0; i < s.length; i++) {
+      chr   = s.charCodeAt(i);
+      hash  = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return 'HASH_'+hash;
+  }
   // CardDeck
   var CardDeck = function(data) {
     var Mustache = require('mustache');
-    this.back = data.back;
     this.ranks = data.ranks;
     this.suits = data.suits;
     this.rank_by_name = {};
@@ -10,6 +19,7 @@ define(function () {
     this.cards = [];
     for (var s=0 ; s<this.suits.length; s++) {
       var suit = this.suits[s];
+      suit.hash_id = hash_id(suit.name);
       this.suit_by_name[suit.name] = suit;
       suit.order = s;
       suit.cards = [];
@@ -18,6 +28,7 @@ define(function () {
     }
     for (var r=0; r<this.ranks.length; r++) {
       var rank = this.ranks[r];
+      rank.hash_id = hash_id(rank.name);
       this.rank_by_name[rank.name] = rank;
       rank.order = r;
       rank.cards = [];
@@ -27,6 +38,7 @@ define(function () {
         var card = rank.by_suit[suit.name];
         card.rank = rank.name;
         card.suit = suit.name;
+        card.hash_id = hash_id(rank.name+'/'+suit.name);
         card.suit_symbol = suit.symbol;
         card.rank_symbol = rank.symbol;
         card.order = suit.order+this.suits.length*rank.order;
@@ -112,6 +124,7 @@ define(function () {
         // Clone it
         return {
           name: rank.name,
+          hash_id: rank.hash_id,
           symbol: rank.symbol,
           desc: rank.desc,
           desc_template: rank.desc_template,

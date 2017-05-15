@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
+var sanitizeHtml = require('sanitize-html');
 
 var requirejs = require("requirejs");
 requirejs.config({
@@ -34,10 +35,7 @@ requirejs([ "mustache", "app/gofish" ],
   io.on("connection", function(socket) {
     socket.joined = false;
     socket.hand = new gofish.CardHand(deck);
-    socket.sanitize = function(s) {
-      return Mustache.render(
-        "{{s}}", {s: s});
-    };
+
     // we don't define these game helpers as methods of game,
     // so that we can emit/serialize it.
     socket.update_game = function() {
@@ -95,6 +93,7 @@ requirejs([ "mustache", "app/gofish" ],
     };
     socket.check_bust = function(sock) {
       if (!sock.hand.cards.length) {
+        var was_playing = game.turn!==null;
         sock.next_turn();
         sock.update_game();
         sock.emit("status", {
@@ -107,7 +106,7 @@ requirejs([ "mustache", "app/gofish" ],
             { u: sock.username }), // TODO list owned ranks
           game: game
         });
-        if (game.turn===null) { // game over
+        if (was_playing && game.turn===null) { // game over
           var scores = game.users.map(function (u) {
             return {
               name: u.name,
@@ -134,7 +133,7 @@ requirejs([ "mustache", "app/gofish" ],
 
     socket.on("join", function(username) {
       if (socket.joined) return;
-      username = socket.sanitize(username.trim().toLowerCase());
+      username = sanitizeHtml(username.trim().toLowerCase(), {allowedTags:[]});
       if (!username) return;
       if (usermap[username]) {
         socket.emit(
@@ -214,7 +213,7 @@ requirejs([ "mustache", "app/gofish" ],
       }
     });
     socket.on("new message", function(data) {
-      data = socket.sanitize(data);
+      data = sanitizeHtml(data);
       socket.broadcast.emit("new message", {
         username: socket.username,
         message: data

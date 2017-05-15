@@ -1,6 +1,7 @@
 # Web-Based Multiplayer "Go Fish" Card Game
 
 ##### Click [here](https://go-fish.glitch.me/) to play
+##### לחצו [כאן](https://cat-go-fish.glitch.me/) לגירסה עברית
 
 Tip: if you find yourself alone there, feel free to "cheat" and play
 against yourself in another browser tab (or desktop against phone).
@@ -76,6 +77,12 @@ Play, remix, and be merry.
 ### Credits:
 
 * Code is based on [socketio-chat](https://glitch.com/~socketio-chat).
+
+* [Alef](http://alef.hagilda.com/) font by [Hagilda](http://hagilda.com/).
+
+* [Emoji font](https://github.com/Ranks/emojione/tree/2.2.7#readme)
+  ([CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))
+  [Emojione](https://www.emojione.com/).
 
 * Swiss card deck
   [images](https://openclipart.org/detail/175474/swiss-card-deck-xvii)

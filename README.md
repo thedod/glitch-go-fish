@@ -1,7 +1,6 @@
 # Web-Based Multiplayer "Go Fish" Card Game
 
-##### Click [here](https://go-fish.glitch.me/) to play
-##### לחצו [כאן](https://cat-go-fish.glitch.me/) לגירסה עברית
+##### Click [here](https://go-fish.glitch.me/) to play • לחצו [כאן](https://go-fish-cats.glitch.me/) למשחק דומה בעברית
 
 Tip: if you find yourself alone there, feel free to "cheat" and play
 against yourself in another browser tab (or desktop against phone).

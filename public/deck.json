@@ -1,117 +1,222 @@
 {
-  "back": {
-    "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fback.png?1492005238166"
-  },
   "suits": [
     {
-      "name": "Communications",
-      "symbol": "&#128276;"
+      "name": "עלה",
+      "symbol": "♠"
     },
     {
-      "name": "Defense",
-      "symbol": "&#9960;"
+      "name": "לב",
+      "symbol": "❤"
     },
     {
-      "name": "Agriculture",
-      "symbol": "&#9880;"
+      "name": "יהלום",
+      "symbol": "♦"
     },
     {
-      "name": "Finance",
-      "symbol": "&#128176;"
+      "name": "תלתן",
+      "symbol": "♣"
     }
   ],
   "ranks": [
     {
-      "name": "Industry",
-      "symbol": "&#9881;",
-      "desc": "A pyramid in which Royalty is at the top, Peasantry is at the bottom, and Ministry maintains the structure.",
-      "desc_template": "{{suit}}",
+      "name": "מדע זה לחלשים",
+      "symbol": "⚗",
+      "desc": "המומחים מוחים, והשיירה נובחת",
+      "markdown": "* [7/2009](https://no2bio.org/letters-to-knesset/#scientists) מכתב המדענים לכנסת\n* [10/2011](https://no2bio.org/letters-to-knesset/#academics) מכתב האקדמאים לכנסת\n* [6/2015](https://no2bio.org/letters-to-knesset/#computer-scientists) מכתב מדעני המחשב לכנסת\n\nסה\"כ: 119 מומחים בעלי שם עולמי, אבל לכנסת יש יתרון מספרי. יש שרי פנים שמעדיפים \"[ללמוד](https://archive.is/kF1TO) את [הנושא](https://archive.is/vLcUE)\" (אולי כל המומחים טעו), ויש כאלה ש[כבר מזמן החליטו](https://www.youtube.com/watch?v=VxclO2hNF64).",
+      "desc_template": "חסר תאור עבור {{suit}}",
       "by_suit": {
-        "Communications": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIC.png?1492005237909",
-          "desc": "Ad / Intel Complex"
+        "עלה": {
+          "desc": "פרופ’ אלי ביהם",
+          "markdown": "[פרופ’ ביהם](https://no2bio.org/eli-biham), לשעבר דיקן הפקולטה למדעי המחשב בטכניון ומומחה בעל שם עולמי להצפנה ואבטחת מידע, יזם את \"[מכתב המדענים](https://no2bio.org/letters-to-knesset/#scientists)\" לכנסת ונחשב לאחד המתנגדים הבולטים ביותר למאגר הביומטרי.\n\n*\"כשאלפי שוטרים וגורמים אחרים יכולים לגשת למידע, אי אפשר לפסול את האפשרות שמישהו ייכנס למאגר שלא למטרות שלשמן יועד.\"* (מתוך [ראיון](https://archive.is/8hnoO#selection-2543.76-2543.276) ל\"הארץ\").",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fscience-of-spades.jpg?1495129742989"
         },
-        "Defense": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FID.png?1492005241997",
-          "desc": "Military / Industrial Simplex"
+        "לב": {
+          "desc": "פרופ’ קרין נהון",
+          "markdown": "[פרופ’ נהון](https://no2bio.org/karine-nahon) היא מיוזמי וחותמי העתירה לבג\"צ נגד חוק המאגר הביומטרי. נהון היא חוקרת וחברת סגל קבועה בבית הספר למידע באוניברסיטת וושינגטון, חברת סגל בחוג לתקשורת באוניברסיטת וושינגטון וראש מרכז אספר ליזמות באוניברסיטה העברית. היא ייצגה את ישראל בוועדת המדע והטכנולוגיה לפיתוח באו”ם.\n\n*\"הח\"כים של הכנסת ה-18 [לא היו מודעים](https://archive.is/CA7YO) לכל ההשלכות, גם הבטחוניות וגם על זכויות אדם, של המאגר הביומטרי.\"* (מתוך ה[וידאו](https://www.youtube.com/watch?v=p4hdv2FUc08)). <small>[השראה לקלף](https://archive.is/CA7YO)</small>",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fscience-of-hearts.jpg?1495130184158"
         },
-        "Agriculture": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIA.png?1492005236808",
-          "desc": "GMO"
+        "יהלום": {
+          "desc": "פרופ’ אמיר הרצברג",
+          "markdown": "[פרופ’ הרצברג](https://no2bio.org/amir-hertzberg), מחותמי [מכתב המדענים](https://no2bio.org/letters-to-knesset), הוא ראש קבוצה שעוסקת במחקרים בנושאי אבטחה, תקשורת והגנה מפני פריצות במחלקה למדעי המחשב באוניברסיטת בר אילן.\n\n*\"דליפת המאגר תאפשר זיהוי מרוחק של אנשים, ללא ידיעתם, לצרכים מסחריים וכן לצרכי פשיעה וטרור, בפרט זיהוי אזרחים ישראלים שנוסעים בעולם.\"* (מתוך ה[וידאו](https://www.youtube.com/watch?v=AhOFFy2ei2c)).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fscience-of-diamonds.jpg?1495129751738"
         },
-        "Finance": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIF.png?1492005236627",
-          "desc": "Banking"
+        "תלתן": {
+          "desc": "פרופ’ עומר ריינגולד",
+          "markdown": "[פרופ’ ריינגולד](https://no2bio.org/omer-reingold) (מהמחלקה למדעי המחשב במכון ויצמן) הוא [חוקר ראשי](http://research.microsoft.com/en-us/people/omreing) במעבדות מיקרוסופט בעמק הסיליקון ומתמחה בהצפנה. פרופ’ ריינגולד זכה בפרסים שונים, בהם  [פרס גדל](http://he.wikipedia.org/wiki/%D7%A4%D7%A8%D7%A1_%D7%92%D7%93%D7%9C) ע”י ההתאחדות האירופאית לחקר מדעי המחשב.\n\n*\"האם אתה צריך להסכים למצלמה בחדר השינה שלך כי אולי זה יכול לעזור למצוא פושעים בדיעבד? [למאגר ביומטרי] יכולים להיות שימושים שפוגעים בפרטיות במידה דומה.\"* (מתוך ה[וידאו](https://www.youtube.com/watch?v=HOiqdIROLBs)).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fscience-of-clubs.jpg?1495129752632"
         }
       }
     },
     {
-      "name": "Royalty",
-      "symbol": "&#128081;",
-      "desc": "Too big to fail. Above the law.",
-      "desc_template": "{{suit}} oligarch",
+      "name": "ביקורת עצמית",
+      "symbol": "⚖",
+      "desc": "מפי הממשל",
+      "markdown": "מבקרי המדינה לינדרשטראוס (2010) ושפירא (2015) התייחסו לחלק גדול מהקלפים שבחפיסה זאת, ועוד. הדו\"חות שלהם, שאישרו בדיעבד את אזהרות המומחים, נוספו לאוקיינוס המסמכים ששרי פנים לא קוראים כי לא קיבלו הארכה מספקת לפיילוט. למזלנו, הנחתומים עצמם מעידים על עיסתם בצורה קצרה ותקשורתית יותר.",
+      "desc_template": "חסר תאור עבור {{suit}}",
       "by_suit": {
-        "Communications": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRC.png?1492005238463",
-          "desc": "Disruptor"
+        "עלה": {
+          "desc": "מבקר המדינה לינדנשטראוס, 2010",
+          "markdown": "הפעם הראשונה שבה הוזכר צמד המילים \"מאגר ביומטרי\" במסמך רשמי, היתה [ההכרזה](https://archive.is/8ohA9) של רה\"מ אולמרט על טיוטת החוק. עד לאותו רגע, אין איזכור למאגר, טיעונים בעד או נגד הקמתו, דיון בעלויות, שימושים אפשרים, סכנות, או חלופות. כך לפחות [נאמר](https://no2bio.org/mevaker) בדו\"ח מבקר המדינה 2010:\n\n*\"לדעת משרד מבקר המדינה היעדרם של מסמכי מפתח  בלשכת מנכ\"ל משרד הפנים הנוכחי על אודות הפרויקט, על מטרותיו, על ההחלטות שהתקבלו בעניינו ועל אבני הדרך שנקבעו ליישומו, אף על פי שהפרויקט נמצא בעיצומו, שחשיבותו הלאומית רבה ושעלויותיו גבוהות, פוגעות ברציפות השלטונית ... בהיעדר מסמכים על תהליך קבלת ההחלטות אי אפשר לדעת מהם השיקולים והנתונים שעליהם התבססו השר והמנכ\"ל בהחלטותיהם.\"*",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fself-awareness-of-spades.jpg?1495129743902"
         },
-        "Defense": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRD.png?1492005236449",
-          "desc": "Contractor"
+        "לב": {
+          "desc": "מבקר המדינה שפירא, 2015",
+          "markdown": "[דו\"ח מבקר המדינה 2015](https://archive.is/gtbwT) מותח ביקורת חסרת תקדים על הנחות היסוד שהובילו להקמת המאגר, על עבודת התכנון שנעשתה על מנת להגדיר את פעילותו, על האופן הבלתי מקצועי שבו נבדקו החלופות השונות, על היעדר גורם-על שיפקח על התנהלות כל הפרויקט, ועוד. בקיצור: [אין מבוגר אחראי](https://storify.com/No2Bio/yn-mbvgr-khry).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fself-awareness-of-hearts.jpg?1495129744351"
         },
-        "Agriculture": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRA.png?1492005237689",
-          "desc": "Seed Copyright Holder"
+        "יהלום": {
+          "desc": "שטרית: \"המאגר הביומטרי יכול להיפרץ\"",
+          "markdown": "#####*\"[אבל למה שמישהו ירצה לפרוץ אותו?](https://archive.is/uO41Q#selection-1387.35-1387.194)\"*",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fself-awareness-of-diamonds.jpg?1495129745267"
         },
-        "Finance": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRF.png?1492005239486",
-          "desc": "Banker"
+        "תלתן": {
+          "desc": "הממשלה מודה: המאגר עלול לדלוף",
+          "markdown": "במהלך דיון של ועדת הכנסת המשותפת שמפקחת על פעילות המאגר הביומטרי, [הודתה](https://archive.is/yGZ0g#selection-1199.0-1199.379) ([צפו](https://www.youtube.com/watch?v=Ua9qL016Zuc)) היועצת המשפטית של הממונה על יישומים ביומטריים במשרד רה\"מ, עו\"ד נעמה בן צבי, שאף מומחה אבטחה לא יכול להבטיח שהמאגר לא ידלוף: *\"אף אחד לא יחתום על תעודת ביטוח שהמאגר לא ידלוף לעולם.\"*",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fself-awareness-of-clubs.jpg?1495129745630"
         }
       }
     },
     {
-      "name": "Ministry",
-      "symbol": "&#9873;",
-      "desc": "Follow the libertarian law of non-intervention, unless Royalty (who is <em>above</em> the law) is concerned.",
-      "desc_template": "Minister of {{suit}}",
+      "name": "בעיות אבטחה",
+      "symbol": "🚨",
+      "desc": "אבטחה זה לפחדנים",
+      "markdown": "עבור מומחה אבטחה, עבודה עבור [מפגע אבטחתי](https://no2bio.org/letters-to-knesset/#computer-scientists) כמו המאגר הביומטרי היא כפויית טובה כמו ג'וב של רב בבית זונות. אי אפשר לדון אותו לכף חובה אם ייכשל בתפקידו מדי פעם, אך מובטח שהכשלונות יהיו מפוארים. טבעי גם שלא יהיה קל למצוא אנשים שיסכימו לאייש את התפקיד.",
+      "desc_template": "חסר תאור עבור {{suit}}",
       "by_suit": {
-        "Communications": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMC.png?1492005240603",
-          "desc": "Yes Minister"
+        "עלה": {
+          "desc": "דליפת מסמך כשלי האבטחה",
+          "markdown": "מסמך של [רמו\"ט](http://www.justice.gov.il/Units/ilita/Pages/default.aspx) ש[הודלף לרשת](https://archive.is/hFVhI) חשף בעיות אבטחה במערכת שקשורה להנפקת תעודות הזהות החכמות (שמכונה ממיל\"א), אשר עלולות להוביל לחשיפת המידע שעובר בהן. [תגובת רשות האוכלוסין וההגירה](https://archive.is/hFVhI#selection-1359.253-1359.369)  (ימים ספורים לפני השקת פיילוט המאגר הביומטרי) היתה: *\"התייחסות רמו\"ט במסמך האמור אינה נוגעת לנתונים הביומטריים המצויים על התעודה הביומטרית כי אם לנתוני אימות אלקטרוניים המשמשים להזדהות מול אתרי ממשלה באינטרנט (שירותי ממשל זמין).\"* שזה כמו להגיד: \"הכספת אולי לא משהו, אבל איך הדלת?\".",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fsecurity-botch-of-spades.jpg?1495129746068"
         },
-        "Defense": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMD.png?1492005239160",
-          "desc": "Minister of Fear"
+        "לב": {
+          "desc": "ערוץ 2 מצליח להנפיק תעודה ביומטרית במירמה",
+          "markdown": "##### [הנה, כך](https://archive.is/zqVWB).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fsecurity-botch-of-hearts.jpg?1495129746513"
         },
-        "Agriculture": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMA.png?1492005238767"
+        "יהלום": {
+          "desc": "לרשות הביומטרית אין מנהל אבטחה",
+          "markdown": "על פי מודעה שאיתרו בתנועה לזכויות דיגיטליות ביוני 2014 (כשנה לאחר השקת הפיילוט) חיפשה הרשות הביומטרית מחפשת מנהל אבטחת מידע (כלומר: מנהל האבטחה עזב באמצע הפיילוט). [תגובת הרשות](https://archive.is/MiCEX#selection-1429.24-1429.118) היתה: *\"למען הסר ספק – מיום הקמת הרשות לניהול המאגר הביומטרי, כיהן בה מנהל אבטחת מידע, עד לפברואר 2014.\"* תודה רבה, באמת.",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fsecurity-botch-of-diamonds.jpg?1495129748106"
         },
-        "Finance": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMF.png?1492005239833"
+        "תלתן": {
+          "desc": "סטודנט הופקד על בניית ליבת המאגר",
+          "markdown": "3 וחצי שנים אחרי תחילת הפיילוט (שהיה אמור להימשך שנתיים), עדיין חסר לב המערכת: תוכנת השוואת נתונים ביומטריים (כך שהפיילוט בכלל לא בודק את מה שהיה אמור לבדוק). הסיבה לכך היא [התנהלות שלומיאלית](https://archive.is/8cGM5) במכרז לרכישת אותה תוכנה.\n\nאז איך בכל זאת יש פיילוט? [מתברר](https://archive.is/E0hbL#selection-1267.101-1267.404) שבינתיים משתמשים בתוכנה זמנית אשר *\"פותחה בעיקרה ע\"י יועץ חיצוני שהחל את עבודתו ברשות האוכלוסין וההגירה כסטודנט 'בעל הכשרת טכנאי עם ניסיון של 5 שנים הלומד באוניברסיטה הפתוחה' ההתקשרות עמו החלה בנובמבר 2010, עם שחרורו מצה\"ל ובטרם סיים את לימודיו.\"*",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fsecurity-botch-of-clubs.jpg?1495129750089"
         }
       }
     },
     {
-      "name": "Peasantry",
-      "symbol": "&#128106;",
-      "desc": "Statistically, it's <strong>you</strong>.",
-      "desc_template": "{{suit}} consumer",
+      "name": "פדיחות שונות",
+      "symbol": "🍌",
+      "desc": "לא הכל זה בעיות אבטחה",
+      "markdown": "גם בתחומים אחרים הצליח המאגר הביומטרי לבייש את עצמו בכבוד.",
+      "desc_template": "חסר תאור עבור {{suit}}",
       "by_suit": {
-        "Communications": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPC.png?1492005242522",
-          "desc": "Hacked"
+        "עלה": {
+          "desc": "מערך המודיעין הישראלי אוסר על אנשיו להצטרף למאגר",
+          "markdown": "השב\"כ, המוסד ואגף המודיעין בצה\"ל [אוסרים](https://archive.is/I5QD6) על העובדים והמשרתים שם להיכנס לפיילוט המאגר הביומטרי שמפעיל משרד הפנים. אם המאגר אינו מאובטח מספיק עבורם – האם הוא מאובטח מספיק עבורנו?",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fglitch-of-spades.jpg?1495130238816"
         },
-        "Defense": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPD.png?1492005241026",
-          "desc": "Wounded"
+        "לב": {
+          "desc": "שני אחים — תמונה אחת",
+          "markdown": "רשות האוכלוסין [הנפיקה](https://archive.is/kov6q) לשני אחים (בני 10 ו-5), דרכונים עם תמונות של אותו אח.\n\nהטעות הפקידותית כשלעצמה זניחה מול העובדה ש*זה אשכרה הצליח*: המערכת (שאמורה לזהות צילומים *שונים* של אותו אדם) לא הצליחה לזהות שמדובר ב*אותה תמונה*.\n\nכיום, כבר [מובן](https://archive.is/E0hbL#selection-1255.0-1259.59) איך נכשלה כך המערכת, אך בזמנו עוד זקפנו גבה.",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fglitch-of-hearts.jpg?1495130239592"
         },
-        "Agriculture": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPA.png?1492005240210",
-          "desc": "Malnourished"
+        "יהלום": {
+          "desc": "משרד הפנים: \"זה לא אני\"",
+          "markdown": "דמיות פיקטיביות שנועדו לקדם את המאגר הביומטרי  [החלו להאשים זו את זו בהתחזות](https://archive.is/gs00i):*\"\"אייל נציג המאגר הביומטרי\": \"שלומי נציג המאגר הביומטרי\" הוא ללא ספק מתחזה.\"* ומיהו \"אייל\"? בפרשייה אחרת, [אמרה](https://archive.is/JJVuq#selection-3887.15-3887.99) דוברת רשות האוכלוסין, סבין חדד: *\"נבהיר חד משמעית כי ׳נציג המאגר הביומטרי׳ הוא מתחזה ובשום פנים ואופן אינו נציג המשרד.\"* אז זהו, ש[כן](https://archive.is/JJVuq#selection-3931.1-3937.353).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fglitch-of-diamonds.jpg?1495130235203"
         },
-        "Finance": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPF.png?1492005241502",
-          "desc": "Bankrupt"
+        "תלתן": {
+          "desc": "משבר תקשורתי",
+          "markdown": "כשהחליט משרד הפנים לקרוא לסיקור של התנהלותו הכושלת \"משבר תקשורתי\", פירסם [מכרז](http://www.moin.gov.il/PublicationsAndUsefullInfo/Tenders/Documents/press-tender-4-2013.pdf) ליועץ תקשורת \"בעל נסיון בניהול משברים תקשורתיים\".\n\nהמכרז עצמו הכיל טקסטים שהועתקו מוויקיפדיה *בניגוד לתנאי הרישיון*, וכך [נולד](https://archive.is/hdp1T) \"משבר תקשורתי\" נוסף.",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fglitch-of-clubs.jpg?1495130236510"
+        }
+      }
+    },
+    {
+      "name": "עובדים עלינו",
+      "symbol": "🎪",
+      "desc": "בתחבולות תעשה לך פיילוט",
+      "markdown": "אמר מי שאמר (ו[זה לא אני](https://archive.is/XcpP5#selection-1729.183-1733.1)): *\"אף אזרח לא יסכים מרצונו הטוב, להפוך חלק מהמאגר הביומטרי\"* אך רצה הגורל והפיילוט אמור, בין השאר, [לנסות להוכיח שזה לא נכון](https://archive.is/zUenM#selection-2103.0-2129.82) 😉. מה עושים? מה שאפשר (ומקווים שלא להתפס): אם ירצו — יאכלו, לא ירצו — יאכלו בכל זאת.",
+      "desc_template": "חסר תאור עבור {{suit}}",
+      "by_suit": {
+        "עלה": {
+          "desc": "משקרים לקשישים",
+          "markdown": "זוג נשוי בשנות השבעים לחייהם, הגיעו לסניף משרד הפנים בחולון כדי להוציא דרכונים. הפקידים שם [אמרו להם](https://archive.is/Xd8sJ) כי דרכונים ביומטרים יחודשו מהר יותר מדרכונים רגילים, ולא סיפקו לזוג הסבר מספק על מהות המאגר.\n\nבתם, שהיא עורכת דין, פנתה בבקשה למחוק אותם מהמאגר, אך נתקלה בסירוב.",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fdeception-of-spades.jpg?1495130232262"
+        },
+        "לב": {
+          "desc": "מכריחים ערבים",
+          "markdown": "*\"למוקד להגנת הפרט הגיעו דיווחים לפיהם הזכות לסרב להשתתף בניסוי הביומטרי אינה מובהרת דיה לתושבי ירושלים המזרחית הפונים ללשכה בוואדי ג'וז. מהדיווחים אף עולה, כי בחלק מהמקרים מדובר בכפייה של ממש.\"* [פניית המוקד להגנת הפרט אל משרד הפנים](פניית המוקד להגנת הפרט אל משרד הפנים).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fdeception-of-hearts.jpg?1495130232898"
+        },
+        "יהלום": {
+          "desc": "חכמים על תיכוניסטים וחיילים בודדים",
+          "markdown": "* רשות האוכלוסין [שכנעה](https://archive.is/BmDMQ) מנהל תיכון בירושלים להציב עמדות מיוחדות בבית הספר, וכ־80% מהתלמידים בחרו להצטרף למאגר.\n* יום סידורים שמאפשר לחיילים בודדים לטפל בנושאים בירוקרטיים [נערך](https://archive.is/pJXlO) על ידי עמותת נפש בנפש, שם חיכו עמדות של המאגר הביומטרי ונציגי רשות האוכלוסין, והם הפצירו בחיילים להצטרף למאגר מבלי שהוסברו להם ההשפעות הכרוכות בהצטרפות.",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fdeception-of-diamonds.jpg?1495130233692"
+        },
+        "תלתן": {
+          "desc": "בג”ץ הורה להפסיק לשקר",
+          "markdown": "* בפברואר 2014 [הורה](https://archive.is/WK97E) בג\"ץ: רשות האוכלוסין תחויב להודיע בכל פרסומיה בנושא המאגר הביומטרי, שההצטרפות אליו אינה חובה.\n\n* החמה זרחה, השיטה פרחה, תביעה על בזיון בית הדין הוגשה, והרשות [הבטיחה](https://archive.is/aVnS6#selection-1777.225-1777.257) שהפרסומים המטעים יתוקנו \"ביום-יומיים הקרובים\".\n\n* אז זהו, ש[לא](https://no2bio.org/shtikipedia).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fdeception-of-clubs.jpg?1495130234683"
+        }
+      }
+    },
+    {
+      "name": "הדמוקרטיה היחידה",
+      "symbol": "💰",
+      "desc": "ולא בכדי",
+          "markdown": " לא ברור אם ישראל היא הדמוקרטיה היחידה שיש בה מאגר ביומטרי חובה לכל התושבים, בגלל שלא ברור אם סופרים גם [הודו](http://no2bio.github.io/biocitationneeded/index-he.html):\n\n* בניגוד ישראל, המאגר בהודו אינו חובה ([לפחות רשמית](https://archive.is/0qVYd)).\n* בהודו המאגר כבר [דולף](https://2jk.org/praxis/?p=5739).\n\nבכל מקרה, סדרה זו מראה שאין לנו עוד הרבה מה ללמוד מהודו בנושאים כמו דמוקרטיה וממשל תקין.",
+      "desc_template": "חסר תאור עבור {{suit}}",
+      "by_suit": {
+        "עלה": {
+          "desc": "שטרית מצביע \"פה אחד\" לבדו",
+          "markdown": "חבר הכנסת מאיר שטרית [נהג](https://archive.is/AZKGI) לאשר בעצמו סעיפים בחוק המאגר הביומטרי, בוועדה שהיתה אמורה לכלול שישה חברי כנסת.",          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fdemocracy-of-spades.jpg?1495130240574"
+        },
+        "לב": {
+          "desc": "איך מכינים פיילוט או נקניקיות",
+          "markdown": "*\"החוקים כמוהם כנקניקיות: מוטב לא לראות את הכנתם.\"* [מיוחס בטעות](https://he.wikiquote.org/wiki/אוטו_פון_ביסמרק) ל[אוטו פון ביסמרק](https://he.wikipedia.org/wiki/%D7%90%D7%95%D7%98%D7%95_%D7%A4%D7%95%D7%9F_%D7%91%D7%99%D7%A1%D7%9E%D7%A8%D7%A7) 😉\n\nגם את פיילוט המאגר הביומטרי [**הכינו**](https://archive.is/zUenM) על פי אותה מסורת.",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fdemocracy-of-hearts.jpg?1495130229859"
+        },
+        "יהלום": {
+          "desc": "הנגבי סגר דיון לפני שהחל",
+          "markdown": "צחי הנגבי, חבר הכנסת מהליכוד שמנהל את הדיון של שתי הוועדות המשותפת שמפקחות על פעילות המאגר הביומטרי, [סגר](https://archive.is/VRT6g) ישיבה שבה אמורה הייתה להיערך הצבעה מחודשת על ההחלטה להאריך את פיילוט המאגר. הנגבי נימק את ההחלטה בכך שח\"כ אחמד טיבי, שהגיש את הבקשה להצבעה המחודשת,  לא נכח באולם הוועדה במועד שנקבע לתחילת הישיבה, 14:00. זאת למרות שטיבי הגיע לאולם זמן שניות בודדות לאחר מכן (ולטענתו, הגיע *לפני* 14:00).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fdemocracy-of-diamonds.jpg?1495130230065"
+        },
+        "תלתן": {
+          "desc": "מינויים לצורך מחטף",
+          "markdown": "ביולי 2015, [התכנסה](https://archive.is/2nUz0) ועדת הכנסת, כמעט ללא הודעה מראש, לדיון בלתי צפוי שמטרתו היתה להגדיל את הרכב הוועדה המשותפת האחראית על פיילוט המאגר הביומטרי. זאת מכיוון שלקואליציה לא היה אז רוב בוועדה הביומטרית.",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fdemocracy-of-clubs.jpg?1495130230510"
+        }
+      }
+    },
+    {
+      "name": "בידור",
+      "symbol": "😹",
+      "desc": "בדיחות טרום-שואה",
+      "markdown": "(אמנם אסור להשוות, אך למרבה המזל גם [אי אפשר](https://archive.is/gtbwT#selection-2513.0-2513.14) 🙃)",
+      "desc_template": "חסר תאור עבור {{suit}}",
+      "by_suit": {
+        "עלה": {
+          "desc": "ראפ באטל: אלפרבר VS נציג המאגר",
+          "markdown": "24 שעות אחרי שתועמלני המאגר הביומטרי [שידרו](https://archive.is/2RnVL) קליפ בסגנון \"ראפ באטל\"™ שהזמינו ביָמְבָּה כסף (שלנו) מנוי אלוש, יצא אלפרבר ב[**ראפ**](https://archive.is/2RnVL) אמיתי כתגובה.",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Ffun-of-spades.jpg?1495129753670"
+        },
+        "לב": {
+          "desc": "למה אנטי?",
+          "markdown": "[\"**למה אנטי**\"](https://www.youtube.com/watch?v=tihtM2R9mrs) הוא אחד מה[סרטונים](https://no2bio.org/why-anti) שהופקו על ידי העמותה לזכויות דיגיטליות [במימון המון](http://www.headstart.co.il/project.aspx?id=6573).\n\nשחקן שמגלם אנס מסביר למה המאגר הביומטרי [טוב לעבריינים](https://no2bio.org/shtikipedia/#s14).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Ffun-of-hearts.jpg?1495129755457"
+        },
+        "יהלום": {
+          "desc": "קומיקס",
+          "markdown": "[**קומיקס**](https://no2bio.org/smbc-comics-nothing-to-hide) (מהסדרה [Saturday Breakfast Morning Cereal](http://www.smbc-comics.com/?id=2849)) בנושא פרטיות ומעקב, תורגם לעברית באישור המחבר. מותר להדפיס ולהפיץ (לא למטרות רווח).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Ffun-of-diamonds.jpg?1495129757696"
+        },
+        "תלתן": {
+          "desc": "אצבע חדשה לכל פועל",
+          "markdown": "[\"**ביומטריה זה סינית בשבילי**\"](https://www.youtube.com/watch?v=yGvd25wzLyg&list=PLDF880F72FE43C36E) היא סידרת תרגומים כוזבים לקטע מתוך הסרט הסיני [אליל הבישול](http://www.imdb.com/title/tt0116426) בהם משבח הסיני הביומטרי את המאגר, ומבטיח לכולם אצבע חדשה אם ידלוף.\n\nיש גם [באנגלית](https://www.youtube.com/watch?v=1_r-H_8VkPs).",
+          "src": "https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Ffun-of-clubs.jpg?1495129759982"
         }
       }
     }

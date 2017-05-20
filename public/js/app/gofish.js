@@ -1,4 +1,4 @@
-define(function () {
+define(function (require) {
   var hash_id = function(s) { // http://stackoverflow.com/a/7616484
     var hash = 0, i, chr;
     if (s.length === 0) return hash;
@@ -12,6 +12,24 @@ define(function () {
   // CardDeck
   var CardDeck = function(data) {
     var Mustache = require('mustache');
+    var showdown = require("showdown");
+    var target_blank_ext = { // A word of caution: http://stackoverflow.com/a/1732454
+      type: 'output',
+      regex: /<a/g,
+      replace: '<a target="_blank"'
+    };
+    var quote_start_ext = {
+      type: 'output',
+      regex: /<em>"/g,
+      replace: '<blockquote><small>'
+    };
+    var quote_end_ext = {
+      type: 'output',
+      regex: /"<.em>/g,
+      replace: '</small></blockquote>'
+    };
+    var Markdown = new showdown.Converter({
+      extensions: [target_blank_ext, quote_start_ext, quote_end_ext] });
     this.ranks = data.ranks;
     this.suits = data.suits;
     this.rank_by_name = {};
@@ -33,6 +51,9 @@ define(function () {
       rank.order = r;
       rank.cards = [];
       if (!rank.symbol) rank.symbol = rank.name[0];
+      if (rank.markdown) {
+        rank.body = Markdown.makeHtml(rank.markdown);
+      }
       for (var s=0 ; s<this.suits.length; s++) {
         var suit = this.suits[s];
         var card = rank.by_suit[suit.name];
@@ -44,6 +65,9 @@ define(function () {
         card.order = suit.order+this.suits.length*rank.order;
         if (!card.desc) {
           card.desc = Mustache.render(rank.desc_template, {'suit': suit.name });
+        }
+        if (card.markdown) {
+          card.body = Markdown.makeHtml(card.markdown);
         }
         this.cards.push(card);
         rank.cards.push(card);
@@ -63,6 +87,7 @@ define(function () {
         name: rank.name,
         symbol: rank.symbol,
         desc_template: rank.desc_template,
+        body: rank.body,
         cards: rank.cards.slice()
       }
     };
@@ -127,6 +152,7 @@ define(function () {
           hash_id: rank.hash_id,
           symbol: rank.symbol,
           desc: rank.desc,
+          body: rank.body,
           desc_template: rank.desc_template,
           cards: rank.cards.slice() // clone the rank's card array
         }

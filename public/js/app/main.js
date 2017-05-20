@@ -52,6 +52,8 @@ define(function(require) {
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
     var socket = io();
+    
+    var is_cheating = location.search==='?unfair';
 
     $.getJSON("/deck.json", function(data) {
       socket.deck = new gofish.CardDeck(data);
@@ -71,10 +73,10 @@ define(function(require) {
       $("#bottom-bar").removeClass('nav-inverse');
       $("#play-bar").empty();
       if (turn===null) {
-        $('#game-status').html('Waiting for players');
+        $('#game-status').html('אין עם מי לשחק');
       }
       if (turn!==null) {
-        $('#game-status').html(turn+"'s turn");
+        $('#game-status').html("התור של "+turn);
         if (turn===username) { // our turn
           var rankmap = {};
           socket.deck.ranks.forEach(function(r) {
@@ -90,9 +92,9 @@ define(function(require) {
             return r.name in rankmap;
           });
 
-          $('#game-status').html("<strong>your</strong> turn");
+          $('#game-status').html("<strong>תורך</strong>");
           $('#username-brand').append(
-            $('<span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>'));
+            $('<span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>'));
           $("#play-bar").html(
             Mustache.render(
               playBarTemplate, {
@@ -125,7 +127,7 @@ define(function(require) {
             // happened (menu might hide entire display)
             $('.collapse').collapse('hide');
             log(Mustache.render(
-              "You ask {{{u}}} for {{r}} of {{s}}...", {
+              "ביקשת מ{{{u}}} קלף {{s}} מרביעיית {{r}}...", {
                 u: $('#play-with-field').text(),
                 r: $('#play-rank-field').text(),
                 s: $('#play-suit-field').text()
@@ -168,13 +170,21 @@ define(function(require) {
         $ranksDropdown.append(
           $(Mustache.render(rankDropdownTemplate, {ranks: user.ranks})));
       }
+      if (is_cheating) {
+        $ranksDropdown.append(
+          $(Mustache.render(rankDropdownTemplate, {
+            ranks: socket.hand.deck.ranks
+          })));
+      }
       $cardModals.empty();
       socket.hand.cards.forEach(function(card) {
         $cardModals.append(
           $(Mustache.render(cardModalTemplate, card)));
       });
+      
       $rankModals.empty();
-      usermap[username].ranks.forEach(function(rank) {
+      var theranks = is_cheating? socket.hand.deck.ranks : usermap[username].ranks;
+      theranks.forEach(function(rank) {
         $rankModals.append(
           $(Mustache.render(rankModalTemplate, rank)));
       });
@@ -184,7 +194,7 @@ define(function(require) {
       username = $usernameInput.val().trim().toLowerCase();
       if (username) {
         $loginModal.modal("hide");
-        $currentInput = $inputMessage.removeAttr("disabled").val("").attr("placeholder", "chat here...");
+        $currentInput = $inputMessage.removeAttr("disabled").val("").attr("placeholder", "הודעה...");
         socket.emit("join", username);
       }
     }
@@ -300,7 +310,7 @@ define(function(require) {
       // nothing so far
     });
     socket.on("disconnect", function() {
-      alert('Disconnectd 😟');
+      alert('התנתקנו 😟');
       document.location.reload();
     });
 
@@ -308,7 +318,7 @@ define(function(require) {
       socket.username = data.username;
       socket.hand = new gofish.CardHand(socket.deck);
       connected = true;
-      var message = "Welcome, "+data.username;
+      var message = "שלום, "+data.username;
       log(message, {
         prepend: true
       });
@@ -318,7 +328,7 @@ define(function(require) {
       username = "";
       $currentInput = $usernameInput.focus().val("")
         .attr("placeholder",
-              "Sorry, " + data.username + " is taken.");
+              "סליחה, השם " + data.username + " תפוס.");
       $loginModal.modal("show");
     });
     socket.on("new message", function(data) {
@@ -333,7 +343,7 @@ define(function(require) {
       updateGame(data);
       var score_html = Mustache.render(
         scoreTemplate, data);
-      log('Game over. Refresh browser to play again.');
+      log('המשחק נגמר. רעננו את הדף כדי לשחק שוב.');
       log(score_html);
       
       $('#score').html(score_html);
@@ -364,19 +374,14 @@ define(function(require) {
       }
       socket.hand.cards.splice(index,1);
       updateHand(socket);
-      // No need. Recipient gets the broadcast in third person ;)
-      // if (data.to) {
-      //   log(Mustache.render(
-      //   "you give {{rank}} of {{suit}} to {{{to}}}", data));
-      // }
     });
     
     socket.on("user joined", function(data) {
-      log(data.username + " joins");
+      log(data.username + " מצטרף/ת");
       updateGame(data);
     });
     socket.on("user left", function(data) {
-      log(data.username + " leaves");
+      log(data.username + " עוזב/ת");
       updateGame(data);
     });
     socket.on("typing", function(data) {

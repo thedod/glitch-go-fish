@@ -1,6 +1,7 @@
+
 @font-face {
   font-family: alef-emoji;
-
+  
   /* Fonts for text outside emoji blocks */
   src:
        url(https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Femojione-svg.woff2?1494102761093) format('woff2'),
@@ -21,7 +22,7 @@ body {
 }
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
 .btn, .navbar, .label {
-  font-family: 'alef-digits', 'alef-emoji', sans-serif;
+  font-family: 'alef-digits', 'alef-emoji', sans-serif;  
 }
 .mustache { display: none; }
 .card-modal img {max-height: 16em; }

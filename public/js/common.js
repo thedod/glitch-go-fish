@@ -12,7 +12,8 @@ requirejs.config({
       jquery: 'jquery.min',
       bootstrap: 'bootstrap.min',
       mustache: 'mustache.min',
-      io: '/socket.io/socket.io'
+      io: '/socket.io/socket.io',
+      showdown : 'https://cdn.rawgit.com/showdownjs/showdown/1.6.4/dist/showdown.min'
     },
     shim: {
         "bootstrap": {

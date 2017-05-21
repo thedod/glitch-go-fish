@@ -4,6 +4,7 @@ define(function(require) {
   var _bootstrap = require("bootstrap");
   var gofish = require("./gofish");
   var Mustache = require("mustache");
+  var urlize = require('urlize');
   $(function() {
     var FADE_TIME = 150;
     var TYPING_TIMER_LENGTH = 400;
@@ -173,7 +174,8 @@ define(function(require) {
       if (is_cheating) {
         $ranksDropdown.append(
           $(Mustache.render(rankDropdownTemplate, {
-            ranks: socket.hand.deck.ranks
+            ranks: socket.hand.deck.ranks,
+            cheat: true
           })));
       }
       $cardModals.empty();
@@ -205,7 +207,7 @@ define(function(require) {
         addChatMessage(
           // Didn't come from server, so we're not re-sanitizing (&amp;-ing)
           { username: username, message: message },
-          { sanitize: true }
+          { sanitize: false } // no need. we sanitize server side now
         );
         socket.emit("new message", message);
       }
@@ -218,9 +220,9 @@ define(function(require) {
       var $username = $('<span class="username"/>').html(data.username).css("color", getUsernameColor(data.username));
       var $messageBody = $("<span/>").addClass("messaegBody");
       if (options && options.sanitize) {
-        $messageBody.text(data.message);
+        $messageBody.text(data.message); // obsolete, actually...
       } else {
-        $messageBody.html(data.message);
+        $messageBody.html(urlize(data.message, {target: "_blank"}));
       }
       var typingClass = data.typing ? "typing" : "";
       var $message = $('<li class="message"/>').data("username", data.username)

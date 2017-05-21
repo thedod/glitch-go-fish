@@ -214,7 +214,7 @@ requirejs([ "mustache", "app/gofish" ],
       }
     });
     socket.on("new message", function(data) {
-      data = sanitizeHtml(data);
+      data = sanitizeHtml(data, {allowedTags:[]});
       socket.broadcast.emit("new message", {
         username: socket.username,
         message: data

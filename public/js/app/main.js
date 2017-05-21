@@ -165,6 +165,8 @@ define(function(require) {
         $cardsDropdown.append(
           $(Mustache.render(cardDropdownTemplate, {cards: socket.hand.cards})));
       }
+      $('.rank-modal').modal('hide');
+      $('.modal-backdrop').remove(); // tweak around sloppy modal disposal :s
       $ranksDropdown.empty();
       var user = usermap[socket.username];
       if (user && user.ranks.length) {
@@ -178,6 +180,8 @@ define(function(require) {
             cheat: true
           })));
       }
+      $('.card-modal').modal('hide');
+      $('.modal-backdrop').remove(); // tweak around sloppy modal disposal :s
       $cardModals.empty();
       socket.hand.cards.forEach(function(card) {
         $cardModals.append(

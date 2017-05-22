@@ -17,7 +17,7 @@
 }
 body {
   padding-top: 70px;
-  padding-bottom: 70px;
+  padding-bottom: 105px; /* tweak against disappearing input line bug */
 }
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
 .btn, .navbar, .label {

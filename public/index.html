@@ -82,6 +82,7 @@
               </span>
             </h3>
             <ul id="user-list" class="list-group"></ul>
+            <ul id="hand-row" class="list-inline text-center"></ul>
           </div>
         </div>
         <div class="row flex-row">
@@ -121,7 +122,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Welcome to Go Fish</h4>
+          <h3 class="modal-title">Welcome to Go Fish</h3>
         </div>
         <div class="modal-body">
           <div class="jumbotron text-center">
@@ -143,7 +144,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title">Game over <small>it takes 2 to go fish</small></h4>
+          <h3 class="modal-title">Game over <small>it takes 2 to go fish</small></h3>
         </div>
         <div class="modal-body">
           <div class="page-header text-center">
@@ -195,7 +196,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">{{ desc }} <small>{{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }}</small></h4>
+            <h3 class="modal-title">{{ desc }} <small>{{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }}</small></h3>
           </div>
           <div class="modal-body text-center">
             <a title="{{ desc}}" target="_blank" href="{{ src }}">
@@ -208,14 +209,14 @@
   </div>
 
   <div id="rank-modal-template" class="mustache">
-    <div id="{{ hash_id }}-modal" class="modal fade rank-modal" tabindex="-1" role="dialog">
+    <div id="{{_}}{{ hash_id }}-modal" class="modal fade rank-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="modal-title">{{{ symbol }}} {{ name }}</h4>
+            <h3 class="modal-title">{{{ symbol }}} {{ name }}</h3>
           </div>
           <div class="modal-body">
             <div class="row">
@@ -304,6 +305,18 @@
       <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
     {{/typing}}
   </div>
+   
+  <div id="hand-row-template" class="mustache">
+    {{#cards}}
+    <li>
+      <button type="button" class="btn btn-default" data-toggle="modal"
+              title="{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})"
+              data-target="#{{ hash_id }}-modal">
+        <img class="img-responsive thumbnail" src="{{ src }}" alt="{{ desc }}" />
+      </button>
+    </li>
+    {{/cards}}
+  </div>
   
   <div id="play-bar-template" class="mustache">
     <li><p class="navbar-text">Ask</p></li>
@@ -377,7 +390,12 @@
     {{#scores}}
     <dt>{{ name }}</dt>
     <dd>
-      {{#hand_size}}<span class="text-danger">{{.}} cards left</span>{{/hand_size}}
+      {{#hand_size}}
+      <span class="text-danger">
+        {{#single_card}}1 card left{{/single_card}}
+        {{^single_card}}{{hand_size}} cards left{{/single_card}}
+      </span>
+      {{/hand_size}}
       <ul class="list-unstyled">
       {{#ranks}}
         <li>{{{ symbol }}} {{ name }}</li>

@@ -8,21 +8,21 @@
 	},
 	"dependencies": {
 	  "coffee-script": "*",
-    "express": "^4.12.4",
-    "requirejs": "*",
-    "socket.io": "*",
-    "sanitize-html": "*"
+          "express": "^4.12.4",
+          "requirejs": "*",
+          "socket.io": "*",
+          "sanitize-html": "*"
 	},
 	"engines": {
-		"node": "4.4.5"
+          "node": "4.4.5"
 	},
 	"keywords": [
-		"node",
-		"express",
+          "node",
+          "express",
     "socketio",
-		"chat",
-    "game",
-    "cards"
-	],
-	"license": "MIT"
+          "chat",
+          "game",
+          "cards"
+    ],
+    "license": "AGPL-3.0"
 }

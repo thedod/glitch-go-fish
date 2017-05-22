@@ -26,6 +26,7 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
 .mustache { display: none; }
 .card-modal img {max-height: 16em; }
 .rank-modal img {max-height: 8em; }
+#hand-row img {max-height: 12em; }
 /* flex styles based on http://www.bootply.com/oWBElgjtTn */
 html,body {
 	height:100%;

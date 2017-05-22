@@ -112,6 +112,7 @@ requirejs([ "mustache", "app/gofish" ],
               name: u.name,
               ranks: u.ranks,
               hand_size: u.hand_size,
+              single_card: u.hand_size===1,
               score: 2*deck.suits.length*u.ranks.length - u.hand_size
             };
           });
@@ -213,7 +214,7 @@ requirejs([ "mustache", "app/gofish" ],
       }
     });
     socket.on("new message", function(data) {
-      data = sanitizeHtml(data);
+      data = sanitizeHtml(data, {allowedTags:[]});
       socket.broadcast.emit("new message", {
         username: socket.username,
         message: data

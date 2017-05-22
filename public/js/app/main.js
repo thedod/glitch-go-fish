@@ -4,6 +4,7 @@ define(function(require) {
   var _bootstrap = require("bootstrap");
   var gofish = require("./gofish");
   var Mustache = require("mustache");
+  var urlize = require('urlize');
   $(function() {
     var FADE_TIME = 150;
     var TYPING_TIMER_LENGTH = 400;
@@ -24,11 +25,13 @@ define(function(require) {
     var $loginModal = $("#login-modal");
     var $chatPage = $("#chat-page");
     var $userList = $("#user-list");
+    var $handRow = $("#hand-row");
     var cardDropdownTemplate = $("#card-dropdown-template").html();
     var rankDropdownTemplate = $("#rank-dropdown-template").html();
     var cardModalTemplate = $("#card-modal-template").html();
     var rankModalTemplate = $("#rank-modal-template").html();
     var userTemplate = $("#user-template").html();
+    var handRowTemplate = $("#hand-row-template").html();
     var playBarTemplate = $("#play-bar-template").html();
     var GameOvTemplate = $("#play-bar-template").html();
     var scoreTemplate = $("#score-template").html();    
@@ -143,6 +146,9 @@ define(function(require) {
       users.forEach(function(user) {
         $userList.append($usermap[user.name]);
       });
+      $handRow.html(Mustache.render(
+        handRowTemplate, {cards: socket.hand.cards }
+      ));      
     }
     function updateUser(user) {
       var $user = $usermap[user.name];
@@ -162,12 +168,16 @@ define(function(require) {
         $cardsDropdown.append(
           $(Mustache.render(cardDropdownTemplate, {cards: socket.hand.cards})));
       }
+      $('.rank-modal').modal('hide');
+      $('.modal-backdrop').remove(); // tweak around sloppy modal disposal :s
       $ranksDropdown.empty();
       var user = usermap[socket.username];
       if (user && user.ranks.length) {
         $ranksDropdown.append(
           $(Mustache.render(rankDropdownTemplate, {ranks: user.ranks})));
       }
+      $('.card-modal').modal('hide');
+      $('.modal-backdrop').remove(); // tweak around sloppy modal disposal :s
       $cardModals.empty();
       socket.hand.cards.forEach(function(card) {
         $cardModals.append(
@@ -195,7 +205,7 @@ define(function(require) {
         addChatMessage(
           // Didn't come from server, so we're not re-sanitizing (&amp;-ing)
           { username: username, message: message },
-          { sanitize: true }
+          { sanitize: false } // no need. we sanitize server side now
         );
         socket.emit("new message", message);
       }
@@ -208,9 +218,9 @@ define(function(require) {
       var $username = $('<span class="username"/>').html(data.username).css("color", getUsernameColor(data.username));
       var $messageBody = $("<span/>").addClass("messaegBody");
       if (options && options.sanitize) {
-        $messageBody.text(data.message);
+        $messageBody.text(data.message); // obsolete, actually...
       } else {
-        $messageBody.html(data.message);
+        $messageBody.html(urlize(data.message, {target: "_blank"}));
       }
       var typingClass = data.typing ? "typing" : "";
       var $message = $('<li class="message"/>').data("username", data.username)

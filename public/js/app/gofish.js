@@ -1,4 +1,4 @@
-define(function () {
+define(function (require) {
   var hash_id = function(s) { // http://stackoverflow.com/a/7616484
     var hash = 0, i, chr;
     if (s.length === 0) return hash;

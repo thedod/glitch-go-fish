@@ -4,6 +4,7 @@ define(function(require) {
   var _bootstrap = require("bootstrap");
   var gofish = require("./gofish");
   var Mustache = require("mustache");
+  var urlize = require('urlize');
   $(function() {
     var FADE_TIME = 150;
     var TYPING_TIMER_LENGTH = 400;
@@ -221,6 +222,7 @@ define(function(require) {
         $messageBody.text(data.message);
       } else {
         $messageBody.html(data.message);
+        $messageBody.html(urlize(data.message, {target: "_blank"}));
       }
       var typingClass = data.typing ? "typing" : "";
       var $message = $('<li class="message"/>').data("username", data.username)

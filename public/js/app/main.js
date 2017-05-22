@@ -25,11 +25,13 @@ define(function(require) {
     var $loginModal = $("#login-modal");
     var $chatPage = $("#chat-page");
     var $userList = $("#user-list");
+    var $handRow = $("#hand-row");
     var cardDropdownTemplate = $("#card-dropdown-template").html();
     var rankDropdownTemplate = $("#rank-dropdown-template").html();
     var cardModalTemplate = $("#card-modal-template").html();
     var rankModalTemplate = $("#rank-modal-template").html();
     var userTemplate = $("#user-template").html();
+    var handRowTemplate = $("#hand-row-template").html();
     var playBarTemplate = $("#play-bar-template").html();
     var GameOvTemplate = $("#play-bar-template").html();
     var scoreTemplate = $("#score-template").html();    
@@ -146,7 +148,11 @@ define(function(require) {
       users.forEach(function(user) {
         $userList.append($usermap[user.name]);
       });
+      $handRow.html(Mustache.render(
+        handRowTemplate, {cards: socket.hand.cards }
+      ));      
     }
+    
     function updateUser(user) {
       var $user = $usermap[user.name];
       if (!$user) {

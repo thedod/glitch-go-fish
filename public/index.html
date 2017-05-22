@@ -84,6 +84,7 @@
               </span>
             </h3>
             <ul id="user-list" class="list-group"></ul>
+            <ul id="hand-row" class="list-inline text-center"></ul>
           </div>
         </div>
         <div class="row flex-row">
@@ -306,6 +307,18 @@
     {{#typing}}
       <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
     {{/typing}}
+  </div>
+  
+  <div id="hand-row-template" class="mustache">
+    {{#cards}}
+    <li>
+      <button type="button" class="btn btn-default" data-toggle="modal"
+              title="{{ desc }} ({{{ rank_symbol }}} {{ rank }} / {{{ suit_symbol }}} {{ suit }})"
+              data-target="#{{ hash_id }}-modal">
+        <img class="img-responsive thumbnail" src="{{ src }}" alt="{{ desc }}" />
+      </button>
+    </li>
+    {{/cards}}
   </div>
   
   <div id="play-bar-template" class="mustache">

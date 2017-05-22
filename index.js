@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
+var sanitizeHtml = require('sanitize-html');
 
 var requirejs = require("requirejs");
 requirejs.config({
@@ -34,10 +35,7 @@ requirejs([ "mustache", "app/gofish" ],
   io.on("connection", function(socket) {
     socket.joined = false;
     socket.hand = new gofish.CardHand(deck);
-    socket.sanitize = function(s) {
-      return Mustache.render(
-        "{{s}}", {s: s});
-    };
+
     // we don't define these game helpers as methods of game,
     // so that we can emit/serialize it.
     socket.update_game = function() {
@@ -60,7 +58,7 @@ requirejs([ "mustache", "app/gofish" ],
         var turn = game.turn;
         if (turn) {
           var message = Mustache.render(
-            "We can't wait forever for {{{turn}}} to make a move.",
+            "נו, כנראה ש{{{turn}}} לא בריכוז.",
             {turn: turn});
           socket.emit("status", { message: message, game: game });
           socket.broadcast.emit("status", { message: message, game: game });
@@ -85,7 +83,7 @@ requirejs([ "mustache", "app/gofish" ],
             current>=0? (current+1)%players.length: 0
           ].name;
         }
-        var message = game.turn+"'s turn";
+        var message = "התור של "+game.turn;
         socket.emit(
           "status", { message: message, game: game });
         socket.broadcast.emit(
@@ -95,19 +93,20 @@ requirejs([ "mustache", "app/gofish" ],
     };
     socket.check_bust = function(sock) {
       if (!sock.hand.cards.length) {
+        var was_playing = game.turn!==null;
         sock.next_turn();
         sock.update_game();
         sock.emit("status", {
-          message: "You're out of cards.",
+          message: "נגמרו לך הקלפים.",
           game: game
         });
         sock.broadcast.emit("status", {
           message: Mustache.render(
-            "{{{u}}} is out of cards.",
+            "נגמרו הקלפים של {{{u}}}.",
             { u: sock.username }), // TODO list owned ranks
           game: game
         });
-        if (game.turn===null) { // game over
+        if (was_playing && game.turn===null) { // game over
           var scores = game.users.map(function (u) {
             return {
               name: u.name,
@@ -134,7 +133,7 @@ requirejs([ "mustache", "app/gofish" ],
 
     socket.on("join", function(username) {
       if (socket.joined) return;
-      username = socket.sanitize(username.trim().toLowerCase());
+      username = sanitizeHtml(username.trim().toLowerCase(), {allowedTags:[]});
       if (!username) return;
       if (usermap[username]) {
         socket.emit(
@@ -186,13 +185,13 @@ requirejs([ "mustache", "app/gofish" ],
         socket.user.hand_size = socket.hand.cards.length;
         socket.emit("status", {
           message: Mustache.render(
-            "You draw {{n}} cards",
+            "משכת {{n}} קלפים מהערימה",
             {n: num_suits}),
           game: game
         });
         socket.broadcast.emit("status", {
           message: Mustache.render(
-            "{{{user}}} draws {{n}} cards",
+            "{{{user}}} משך/ה {{n}} קלפים מהערימה",
             {user: socket.username, n: num_suits}),
           game: game
         });
@@ -202,19 +201,19 @@ requirejs([ "mustache", "app/gofish" ],
         };
       } else {
         socket.emit("status", {
-          message: "Not enough cards in the pile for you &#128542;",
+          message: "אין מספיק קלפים בערימה עבורך &#128542;",
           game: game          
         });
         socket.broadcast.emit("status", {
           message: Mustache.render(
-            "Not enough cards in the pile for {{user}} &#128542;",
+            "אין מספיק קלפים בערימה עבור {{user}} &#128542;",
             {user: socket.username}),
           game: game          
         });
       }
     });
     socket.on("new message", function(data) {
-      data = socket.sanitize(data);
+      data = sanitizeHtml(data, {allowedTags:[]});
       socket.broadcast.emit("new message", {
         username: socket.username,
         message: data
@@ -239,7 +238,7 @@ requirejs([ "mustache", "app/gofish" ],
         if (fromsock) {
           socket.broadcast.emit("status", {
             message: Mustache.render(
-              "{{u}} asks {{data.from}} for {{data.rank}} of {{data.suit}}...",
+              "{{u}} מבקש מ{{data.from}} קלף {{data.suit}} מרביעיית {{data.rank}}...",
               {u:socket.username, data:data}
             ),
             game: game
@@ -262,8 +261,8 @@ requirejs([ "mustache", "app/gofish" ],
             }
             socket.update_game();
             var message = Mustache.render(
-              "{{to}} takes {{card.rank}} of {{card.suit}} from {{from}}"+
-              "{{#pr}}, pulling the {{{symbol}}} {{name}} rank &#9996;{{/pr}}",
+              "{{to}} לוקח/ת קלף {{card.suit}} מרביעיית {{card.rank}} מ{{from}}"+
+              "{{#pr}}, ומשלים/ה את רביעיית {{{symbol}}} {{name}} &#9996;{{/pr}}",
               {
                 from: fromsock.username, to: socket.username,
                 card: card, pr: pr
@@ -279,7 +278,7 @@ requirejs([ "mustache", "app/gofish" ],
             if (game.turn===socket.username) {
               socket.set_turn_timer();
               socket.emit(
-                "status", { message: "You get another turn &#9996;", game: game });
+                "status", { message: "קיבלת תור נוסף &#9996;", game: game });
             }
           } else {
             // Go fish
@@ -296,15 +295,15 @@ requirejs([ "mustache", "app/gofish" ],
               socket.emit(
                 "status", {
                   message: Mustache.render(
-                    "You go fish {{rank}} of {{suit}}", card),
+                    "דגת {{suit}} מרביעיית {{rank}}", card),
                   game: game });
               socket.broadcast.emit(
-                "status", { message: "Go fish", game: game });
+                "status", { message: "לך/י לדוג", game: game });
               
               if (pr) {
                 var message = Mustache.render(
-                  "Lucky fishing trip. {{user}}"+
-                  "{{#pr}} pulls the {{{symbol}}} {{name}} rank &#9996;{{/pr}}",
+                  "דיג מוצלח. {{user}}"+
+                  "{{#pr}} משלים/ה את רביעיית {{{symbol}}} {{name}} &#9996;{{/pr}}",
                   { user: socket.username, card: card, pr: pr });
                 socket.emit(
                   "status", { message: message, game: game, pr: pr });
@@ -314,9 +313,9 @@ requirejs([ "mustache", "app/gofish" ],
               }
             } else {
               socket.emit(
-                "status", { message: "Can't go fish &#128542;", game: game });  
+                "status", { message: "אין מה לדוג &#128542;", game: game });  
               socket.broadcast.emit(
-                "status", { message: "Can't go fish &#128542;", game: game });  
+                "status", { message: "אין מה לדוג &#128542;", game: game });  
             };
             socket.next_turn();
           }

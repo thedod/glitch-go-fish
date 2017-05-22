@@ -1,117 +1,100 @@
 {
-  "back": {
-    "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fback.png?1492005238166"
-  },
   "suits": [
     {
-      "name": "Communications",
-      "symbol": "&#128276;"
+      "name": "עלה",
+      "symbol": "♠"
     },
     {
-      "name": "Defense",
-      "symbol": "&#9960;"
+      "name": "לב",
+      "symbol": "❤"
     },
     {
-      "name": "Agriculture",
-      "symbol": "&#9880;"
+      "name": "יהלום",
+      "symbol": "♦"
     },
     {
-      "name": "Finance",
-      "symbol": "&#128176;"
+      "name": "תלתן",
+      "symbol": "♣"
     }
   ],
   "ranks": [
     {
-      "name": "Industry",
-      "symbol": "&#9881;",
-      "desc": "A pyramid in which Royalty is at the top, Peasantry is at the bottom, and Ministry maintains the structure.",
-      "desc_template": "{{suit}}",
+      "name": "פומה",
+      "symbol": "🐈",
+      "desc": "גיברת ממורמרת",
+      "desc_template": "פומת {{suit}}",
       "by_suit": {
-        "Communications": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIC.png?1492005237909",
-          "desc": "Ad / Intel Complex"
+        "עלה": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fpuma-of-spades.png?1493929244682"
         },
-        "Defense": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FID.png?1492005241997",
-          "desc": "Military / Industrial Simplex"
+        "לב": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fpuma-of-hearts.png?1493929252500"
         },
-        "Agriculture": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIA.png?1492005236808",
-          "desc": "GMO"
+        "יהלום": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fpuma-of-diamonds.png?1493929243496"
         },
-        "Finance": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FIF.png?1492005236627",
-          "desc": "Banking"
+        "תלתן": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fpuma-of-clubs.png?1493929246971"
         }
       }
     },
     {
-      "name": "Royalty",
-      "symbol": "&#128081;",
-      "desc": "Too big to fail. Above the law.",
-      "desc_template": "{{suit}} oligarch",
+      "name": "ג'ינג'י",
+      "symbol": "🔥",
+      "desc": "מוכה תימהון",
+      "desc_template": "ג'ינג'י {{suit}}",
       "by_suit": {
-        "Communications": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRC.png?1492005238463",
-          "desc": "Disruptor"
+        "עלה": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fjinjer-of-spades.png?1493929258925"
         },
-        "Defense": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRD.png?1492005236449",
-          "desc": "Contractor"
+        "לב": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fjinjer-of-hearts.png?1493929257420"
         },
-        "Agriculture": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRA.png?1492005237689",
-          "desc": "Seed Copyright Holder"
+        "יהלום": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fjinjer-of-diamonds.png?1493929262808"
         },
-        "Finance": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FRF.png?1492005239486",
-          "desc": "Banker"
+        "תלתן": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fjinjer-of-clubs.png?1493929261231"
         }
       }
     },
     {
-      "name": "Ministry",
-      "symbol": "&#9873;",
-      "desc": "Follow the libertarian law of non-intervention, unless Royalty (who is <em>above</em> the law) is concerned.",
-      "desc_template": "Minister of {{suit}}",
+      "name": "נַמִיר",
+      "symbol": "🐅",
+      "desc_template": "נְמִיר {{suit}}",
+      "desc": "הלוחש לעכברים",
       "by_suit": {
-        "Communications": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMC.png?1492005240603",
-          "desc": "Yes Minister"
+        "עלה": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Ftiger-of-spades.png?1493929272061"
         },
-        "Defense": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMD.png?1492005239160",
-          "desc": "Minister of Fear"
+        "לב": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Ftiger-of-hearts.png?1493929272061"
         },
-        "Agriculture": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMA.png?1492005238767"
+        "יהלום": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Ftiger-of-diamonds.png?1493929283805"
         },
-        "Finance": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FMF.png?1492005239833"
+        "תלתן": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Ftiger-of-clubs.png?1493929292352"
         }
       }
     },
     {
-      "name": "Peasantry",
-      "symbol": "&#128106;",
-      "desc": "Statistically, it's <strong>you</strong>.",
-      "desc_template": "{{suit}} consumer",
+      "name": "פרה",
+      "symbol": "🐮",
+      "desc_template": "פרת {{suit}}",
+      "desc": "מחפשת מה להשמיד",
       "by_suit": {
-        "Communications": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPC.png?1492005242522",
-          "desc": "Hacked"
+        "עלה": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fcow-of-spades.png?1493929279548"
         },
-        "Defense": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPD.png?1492005241026",
-          "desc": "Wounded"
+        "לב": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fcow-of-hearts.png?1493929290736"
         },
-        "Agriculture": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPA.png?1492005240210",
-          "desc": "Malnourished"
+        "יהלום": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fcow-of-diamonds.png?1493929289336"
         },
-        "Finance": {
-          "src": "https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FPF.png?1492005241502",
-          "desc": "Bankrupt"
+        "תלתן": {
+          "src": "https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Fcow-of-clubs.png?1493929287983"
         }
       }
     }

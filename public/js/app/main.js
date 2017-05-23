@@ -206,7 +206,7 @@ define(function(require) {
         addChatMessage(
           // Didn't come from server, so we're not re-sanitizing (&amp;-ing)
           { username: username, message: message },
-          { sanitize: true }
+          { sanitize: false } // we sanitize server side now
         );
         socket.emit("new message", message);
       }
@@ -221,7 +221,6 @@ define(function(require) {
       if (options && options.sanitize) {
         $messageBody.text(data.message);
       } else {
-        $messageBody.html(data.message);
         $messageBody.html(urlize(data.message, {target: "_blank"}));
       }
       var typingClass = data.typing ? "typing" : "";

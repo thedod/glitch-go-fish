@@ -5,7 +5,7 @@
 Tip: if you find yourself alone there, feel free to "cheat" and play
 against yourself in another browser tab (or desktop against phone).
 
-![screenshots](https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fgo-fish.gif?1493327705893)
+![screenshots](https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fgo-fish-screenshot.gif?1495496552458)
 
 ### The card deck
 
@@ -67,7 +67,7 @@ The deck is based on the [Swiss](https://en.wikipedia.org/wiki/Swiss_playing_car
 * Eventually, more and more empty-handed players would become spectators,
   until there are less than 2 left, and the game is over.
 
-![game over screenshot](https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fgame-over.png?1493329682733)
+![game over screenshot](https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fgame-over.png?1495496690325)
 
 Play, remix, and be merry.
 
@@ -79,10 +79,6 @@ Play, remix, and be merry.
 
 * [Alef](http://alef.hagilda.com/) font by [Hagilda](http://hagilda.com/).
 
-* [Emoji font](https://github.com/Ranks/emojione/tree/2.2.7#readme)
-  ([CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))
-  [Emojione](https://www.emojione.com/).
-
 * Swiss card deck
   [images](https://openclipart.org/detail/175474/swiss-card-deck-xvii)
   by [mariotomo](https://openclipart.org/user-detail/mariotomo).
@@ -92,3 +88,10 @@ is based on art by [Last-Dino](https://openclipart.org/detail/170641/playing-car
   
 * Thanks to the [Glitch](https://glitch.com/) team for making this so
   easy to happen.
+
+
+#### Licenses
+
+* Code is licensed under an [AGPL 3.0](https://www.gnu.org/licenses/agpl-3.0.html) license.
+* Content is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+* <a href="https://github.com/Ranks/emojione/tree/2.2.7#readme">Emoji font</a> is licensed by <a href="https://www.emojione.com/">EmojiOne</a> under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.

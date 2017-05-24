@@ -5,6 +5,7 @@ define(function(require) {
   var gofish = require("./gofish");
   var Mustache = require("mustache");
   var urlize = require('urlize');
+  var Push = require('push');
   $(function() {
     var FADE_TIME = 150;
     var TYPING_TIMER_LENGTH = 400;
@@ -61,6 +62,19 @@ define(function(require) {
     $.getJSON("/deck.json", function(data) {
       socket.deck = new gofish.CardDeck(data);
     });
+    
+    function pushNotify(msg) {
+      Push.create("לכו לדוג ביומטריה", {
+        body: msg,
+        icon: 'https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fgo-fish-bio-small.jpg?1495101219393',
+        timeout: 23000,
+        vibrate: [200, 100, 50, 25],
+        onClick: function () {
+            window.focus();
+            this.close()
+        }
+      });
+    }
     
     function updateGame(data) {
       if (data) {
@@ -215,7 +229,6 @@ define(function(require) {
       if (message && connected) {
         $inputMessage.val("");
         addChatMessage(
-          // Didn't come from server, so we're not re-sanitizing (&amp;-ing)
           { username: username, message: message },
           { sanitize: false } // no need. we sanitize server side now
         );
@@ -322,6 +335,7 @@ define(function(require) {
       // nothing so far
     });
     socket.on("disconnect", function() {
+      pushNotify('התנתקנו 😟');
       alert('התנתקנו 😟');
       document.location.reload();
     });
@@ -345,10 +359,16 @@ define(function(require) {
     });
     socket.on("new message", function(data) {
       addChatMessage(data);
+      if (data.username!==socket.username) {
+                pushNotify(data.username+': "'+data.message+'"');
+      }
     });
     socket.on("status", function(data) {
       log(data.message);
       updateGame(data);
+      if (data.announce_turn && data.game.turn===socket.username) {
+        pushNotify("תורך");
+      }
     });
     socket.on("game over", function(data) {
       socket.hand.clear();
@@ -389,12 +409,12 @@ define(function(require) {
     });
     
     socket.on("user joined", function(data) {
-      log(data.username + " מצטרף/ת");
       updateGame(data);
+      log(data.username + " מצטרף/ת");
     });
     socket.on("user left", function(data) {
-      log(data.username + " עוזב/ת");
       updateGame(data);
+      log(data.username + " עוזב/ת");
     });
     socket.on("typing", function(data) {
       addChatTyping(data);

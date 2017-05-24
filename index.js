@@ -85,9 +85,9 @@ requirejs([ "mustache", "app/gofish" ],
         }
         var message = "התור של "+game.turn;
         socket.emit(
-          "status", { message: message, game: game });
+          "status", { message: message, game: game, announce_turn: true });
         socket.broadcast.emit(
-          "status", { message: message, game: game });
+          "status", { message: message, game: game, announce_turn: true });
         socket.set_turn_timer();
       }
     };

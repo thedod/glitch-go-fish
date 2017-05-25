@@ -57,6 +57,12 @@ define(function(require) {
     var $currentInput = $usernameInput.focus();
     var socket = io();
     
+    $(window).on('beforeunload', function() {
+      if (connected && (socket.hand.cards.length || socket.ranks.length)) {
+        return true;
+      };
+    });
+    
     var is_cheating = location.search==='?unfair';
 
     $.getJSON("/deck.json", function(data) {
@@ -335,6 +341,7 @@ define(function(require) {
       // nothing so far
     });
     socket.on("disconnect", function() {
+      connected = false;
       pushNotify('התנתקנו 😟');
       alert('התנתקנו 😟');
       document.location.reload();
@@ -377,7 +384,7 @@ define(function(require) {
         scoreTemplate, data);
       log('המשחק נגמר. רעננו את הדף כדי לשחק שוב.');
       log(score_html);
-      
+      pushNotify('המשחק נגמר');
       $('#score').html(score_html);
       $('#game-over-modal').modal('show');
     });

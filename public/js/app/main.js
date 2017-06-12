@@ -6,6 +6,8 @@ define(function(require) {
   var Mustache = require("mustache");
   var urlize = require('urlize');
   var Push = require('push');
+  var Clipboard = require('clipboard');
+  
   $(function() {
     var FADE_TIME = 150;
     var TYPING_TIMER_LENGTH = 400;
@@ -19,6 +21,7 @@ define(function(require) {
     var $messagesDiv = $("#messages-div");
     var $cardsDropdown = $("#cards-dropdown");
     var $ranksDropdown = $("#ranks-dropdown");
+    var $deckDropdown = $("#deck-dropdown");
     var $cardModals = $("#card-modals");
     var $rankModals = $("#rank-modals");
     var $messages = $(".messages");
@@ -62,8 +65,7 @@ define(function(require) {
         return true;
       };
     });
-    
-    var is_cheating = location.search==='?unfair';
+    var clipboard = new Clipboard('.copy-btn');
 
     $.getJSON("/deck.json", function(data) {
       socket.deck = new gofish.CardDeck(data);
@@ -80,6 +82,10 @@ define(function(require) {
             this.close()
         }
       });
+      // See https://gist.github.com/xem/670dec8e70815842eb95
+      var snd = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+
+                          Array(1e3).join(123));  
+      snd.play();
     }
     
     function updateGame(data) {
@@ -96,7 +102,9 @@ define(function(require) {
       $("#bottom-bar").removeClass('nav-inverse');
       $("#play-bar").empty();
       if (turn===null) {
-        $('#game-status').html('אין עם מי לשחק');
+        $('#game-status').html(
+          'אין עם מי לשחק <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#invite-modal">'+
+          '👋 הזמינו חברים לפה</button>');
       }
       if (turn!==null) {
         $('#game-status').html("התור של "+turn);
@@ -198,14 +206,13 @@ define(function(require) {
       if (user && user.ranks.length) {
         $ranksDropdown.append(
           $(Mustache.render(rankDropdownTemplate, {ranks: user.ranks})));
-      }
-      if (is_cheating) {
-        $ranksDropdown.append(
-          $(Mustache.render(rankDropdownTemplate, {
-            ranks: socket.hand.deck.ranks,
-            cheat: true
-          })));
-      }
+      };
+      $deckDropdown.html(
+        $(Mustache.render(rankDropdownTemplate, {
+          ranks: socket.hand.deck.ranks,
+          is_deck: true
+        }))
+      );
       $('.card-modal').modal('hide');
       $('.modal-backdrop').remove(); // tweak around sloppy modal disposal :s
       $cardModals.empty();
@@ -215,7 +222,7 @@ define(function(require) {
       });
       
       $rankModals.empty();
-      var theranks = is_cheating? socket.hand.deck.ranks : usermap[username].ranks;
+      var theranks = socket.hand.deck.ranks;
       theranks.forEach(function(rank) {
         $rankModals.append(
           $(Mustache.render(rankModalTemplate, rank)));
@@ -418,10 +425,12 @@ define(function(require) {
     socket.on("user joined", function(data) {
       updateGame(data);
       log(data.username + " מצטרף/ת");
+      pushNotify(data.username + " מצטרף/ת");
     });
     socket.on("user left", function(data) {
       updateGame(data);
       log(data.username + " עוזב/ת");
+      pushNotify(data.username + " עוזב/ת");
     });
     socket.on("typing", function(data) {
       addChatTyping(data);

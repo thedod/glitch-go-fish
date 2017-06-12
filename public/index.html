@@ -54,6 +54,7 @@
           <li><ul class="nav navbar-nav" id="ranks-dropdown"></ul></li>
         </ul>
         <ul class="nav navbar-nav navbar-left">
+          <li><ul class="nav navbar-nav" id="deck-dropdown"></ul></li>
           <li>
             <a target="_blank" class="navbar-link"
                  href="https://glitch.com/~go-fish-bio">
@@ -138,6 +139,37 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->        
   </div><!-- /.modal -->
+
+  <div id="invite-modal" class="modal" tabindex="-1" role="dialog"
+       data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            👋 להזמין חברים
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="media">
+            <div class="media-left">
+              <img class="img-qr hidden-xs hidden-sm" alt="קוד לסריקה"
+                   src="https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Finvite.png?1496040267785">
+            </div>
+            <div class="media-body">
+              <textarea class="form-control" readonly id="invite-textarea">רוצה לשחק אתי "לכו לדוג ביומטריה"? אני מחכה לך כאן https://go-fish-bio.glitch.me</textarea>
+              <button class="copy-btn btn btn-success form-control" data-clipboard-target="#invite-textarea">
+                <span class="glyphicon glyphicon-copy"></span>
+                העתיקו כדי לשלוח לחבר/ה
+              </button>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->        
+  </div><!-- /.modal -->
   
   <div id="game-over-modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -207,7 +239,11 @@
               </a>
               </div>
               <div class="media-body">
-                <h4 class="media-heading">{{ desc }}</h4>
+                <h4 class="media-heading">
+                  <a target="_blank" href="card.html#{{ rank }}/{{ suit }}">
+                  {{ desc }}
+                  </a>
+                </h4>
                 {{{ body }}}
               </div>
             </div>
@@ -241,7 +277,11 @@
                   </a>
                 </div>
                 <div class="media-body">
-                  <h4 class="media-heading">{{{ suit_symbol }}} {{ desc }}</h4>
+                  <h4 class="media-heading">
+                    <a target="_blank" href="card.html#{{ rank }}/{{ suit }}">
+                    {{ desc }}
+                    </a>
+                  </h4>
                   {{{ body }}}
                 </div>
               </li>
@@ -274,7 +314,7 @@
   <div id="rank-dropdown-template" class="mustache">
     <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-         aria-expanded="false">{{#cheat}}☠{{/cheat}}{{^cheat}}רביעיות{{/cheat}} <span class="caret"></span></a>
+         aria-expanded="false">{{#is_deck}}החפיסה המלאה{{/is_deck}}{{^is_deck}}רביעיות{{/is_deck}} <span class="caret"></span></a>
       <ul class="dropdown-menu" id="ranks-menu">
         {{#ranks}}
           <li>

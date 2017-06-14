@@ -66,12 +66,19 @@ define(function(require) {
       };
     });
     var clipboard = new Clipboard('.copy-btn');
+    $('#mute-button').on('click', function() {
+      pushNotify(`התראות שמע ${$('#mute-button').hasClass('active')?
+                 'מופעלות' : 'מושתקות'}`, true); // inverse logic (wasn't toggled yet)
+      $('#mute-icon').toggleClass('glyphicon-volume-off').toggleClass('glyphicon-volume-up');
+    });
 
     $.getJSON("/deck.json", function(data) {
       socket.deck = new gofish.CardDeck(data);
     });
     
-    function pushNotify(msg) {
+    function pushNotify(msg, inverse_logic) {
+      // inverse_logic is true when we pushNotify from mute button's
+      // "click" handler, because button state only gets toggled later
       Push.create("לכו לדוג ביומטריה", {
         body: msg,
         icon: 'https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2Fgo-fish-bio-small.jpg?1495101219393',
@@ -82,12 +89,13 @@ define(function(require) {
             this.close()
         }
       });
-      // See https://gist.github.com/xem/670dec8e70815842eb95
-      var snd = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+
-                          Array(1e3).join(123));  
-      snd.play();
-    }
-    
+      if (!!$('#mute-button').hasClass('active') === !!inverse_logic) { // !! coerces bool 👌
+        // Audio data: https://gist.github.com/xem/670dec8e70815842eb95
+        var snd = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+
+                            Array(1e3).join(123));  
+        snd.play();        
+      }
+    }    
     function updateGame(data) {
       if (data) {
         users = data.game.users;

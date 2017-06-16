@@ -7,6 +7,7 @@ define(function(require) {
   var urlize = require('urlize');
   var Push = require('push');
   var Clipboard = require('clipboard');
+  var beep = new Audio('https://cdn.glitch.com/ae7b2877-6cbf-4b3c-aa88-75ae30552ec9%2FWATER.wav?1497644879344');
   
   $(function() {
     var FADE_TIME = 150;
@@ -91,9 +92,10 @@ define(function(require) {
       });
       if (!!$('#mute-button').hasClass('active') === !!inverse_logic) { // !! coerces bool 👌
         // Audio data: https://gist.github.com/xem/670dec8e70815842eb95
-        var snd = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+
-                            Array(1e3).join(123));  
-        snd.play();        
+        // var snd = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+
+        //                     Array(1e3).join(123));  
+        // snd.play();
+        beep.play();
       }
     }    
     function updateGame(data) {

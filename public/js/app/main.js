@@ -5,6 +5,10 @@ define(function(require) {
   var gofish = require("./gofish");
   var Mustache = require("mustache");
   var urlize = require('urlize');
+  var Push = require('push');
+  var Clipboard = require('clipboard');
+  var beep = new Audio('https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2FSONAR.wav?1497644439627');
+  
   $(function() {
     var FADE_TIME = 150;
     var TYPING_TIMER_LENGTH = 400;
@@ -18,6 +22,7 @@ define(function(require) {
     var $messagesDiv = $("#messages-div");
     var $cardsDropdown = $("#cards-dropdown");
     var $ranksDropdown = $("#ranks-dropdown");
+    var $deckDropdown = $("#deck-dropdown");
     var $cardModals = $("#card-modals");
     var $rankModals = $("#rank-modals");
     var $messages = $(".messages");
@@ -55,11 +60,44 @@ define(function(require) {
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
     var socket = io();
+    
+    $(window).on('beforeunload', function() {
+      if (connected && (socket.hand.cards.length || socket.ranks.length)) {
+        return true;
+      };
+    });
+    var clipboard = new Clipboard('.copy-btn');
+    $('#mute-button').on('click', function() {
+      pushNotify(`Audio notifications ${$('#mute-button').hasClass('active')?
+                 'on' : 'off'}`, true); // inverse logic (wasn't toggled yet)
+      $('#mute-icon').toggleClass('glyphicon-volume-off').toggleClass('glyphicon-volume-up');
+    });
 
     $.getJSON("/deck.json", function(data) {
       socket.deck = new gofish.CardDeck(data);
     });
     
+    function pushNotify(msg, inverse_logic) {
+      // inverse_logic is true when we pushNotify from mute button's
+      // "click" handler, because button state only gets toggled later
+      Push.create("Go Fish", {
+        body: msg,
+        icon: 'https://cdn.glitch.com/ccb30db3-78cd-46da-af4b-a75cabfc5233%2Fgo-fish-color.png?1493755260516',
+        timeout: 23000,
+        vibrate: [200, 100, 50, 25],
+        onClick: function () {
+            window.focus();
+            this.close()
+        }
+      });
+      if (!!$('#mute-button').hasClass('active') === !!inverse_logic) { // !! coerces bool 👌
+        // Audio data: https://gist.github.com/xem/670dec8e70815842eb95
+        // var snd = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+
+        //                     Array(1e3).join(123));  
+        // snd.play();
+        beep.play();
+      }
+    }    
     function updateGame(data) {
       if (data) {
         users = data.game.users;
@@ -74,7 +112,9 @@ define(function(require) {
       $("#bottom-bar").removeClass('nav-inverse');
       $("#play-bar").empty();
       if (turn===null) {
-        $('#game-status').html('Waiting for players');
+        $('#game-status').html(
+          'No one to play with <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#invite-modal">'+
+          '👋Invite friends</button>');
       }
       if (turn!==null) {
         $('#game-status').html(turn+"'s turn");
@@ -150,6 +190,7 @@ define(function(require) {
         handRowTemplate, {cards: socket.hand.cards }
       ));      
     }
+    
     function updateUser(user) {
       var $user = $usermap[user.name];
       if (!$user) {
@@ -175,7 +216,13 @@ define(function(require) {
       if (user && user.ranks.length) {
         $ranksDropdown.append(
           $(Mustache.render(rankDropdownTemplate, {ranks: user.ranks})));
-      }
+      };
+      $deckDropdown.html(
+        $(Mustache.render(rankDropdownTemplate, {
+          ranks: socket.hand.deck.ranks,
+          is_deck: true
+        }))
+      );
       $('.card-modal').modal('hide');
       $('.modal-backdrop').remove(); // tweak around sloppy modal disposal :s
       $cardModals.empty();
@@ -183,8 +230,10 @@ define(function(require) {
         $cardModals.append(
           $(Mustache.render(cardModalTemplate, card)));
       });
+      
       $rankModals.empty();
-      usermap[username].ranks.forEach(function(rank) {
+      var theranks = socket.hand.deck.ranks;
+      theranks.forEach(function(rank) {
         $rankModals.append(
           $(Mustache.render(rankModalTemplate, rank)));
       });
@@ -203,7 +252,6 @@ define(function(require) {
       if (message && connected) {
         $inputMessage.val("");
         addChatMessage(
-          // Didn't come from server, so we're not re-sanitizing (&amp;-ing)
           { username: username, message: message },
           { sanitize: false } // no need. we sanitize server side now
         );
@@ -310,7 +358,9 @@ define(function(require) {
       // nothing so far
     });
     socket.on("disconnect", function() {
-      alert('Disconnectd 😟');
+      connected = false;
+      pushNotify('disconnected 😟');
+      alert('disconnected 😟');
       document.location.reload();
     });
 
@@ -333,10 +383,16 @@ define(function(require) {
     });
     socket.on("new message", function(data) {
       addChatMessage(data);
+      if (data.username!==socket.username) {
+                pushNotify(data.username+': "'+data.message+'"');
+      }
     });
     socket.on("status", function(data) {
       log(data.message);
       updateGame(data);
+      if (data.announce_turn && data.game.turn===socket.username) {
+        pushNotify("Your turn");
+      }
     });
     socket.on("game over", function(data) {
       socket.hand.clear();
@@ -345,7 +401,7 @@ define(function(require) {
         scoreTemplate, data);
       log('Game over. Refresh browser to play again.');
       log(score_html);
-      
+      pushNotify('Game over.');
       $('#score').html(score_html);
       $('#game-over-modal').modal('show');
     });
@@ -374,20 +430,17 @@ define(function(require) {
       }
       socket.hand.cards.splice(index,1);
       updateHand(socket);
-      // No need. Recipient gets the broadcast in third person ;)
-      // if (data.to) {
-      //   log(Mustache.render(
-      //   "you give {{rank}} of {{suit}} to {{{to}}}", data));
-      // }
     });
     
     socket.on("user joined", function(data) {
-      log(data.username + " joins");
       updateGame(data);
+      log(data.username + " joins");
+      pushNotify(data.username + " joins");
     });
     socket.on("user left", function(data) {
-      log(data.username + " leaves");
       updateGame(data);
+      log(data.username + " leaves");
+      pushNotify(data.username + " leaves");
     });
     socket.on("typing", function(data) {
       addChatTyping(data);

@@ -1,6 +1,7 @@
+
 @font-face {
   font-family: alef-emoji;
-
+  
   /* Fonts for text outside emoji blocks */
   src:
        url(https://cdn.glitch.com/6c90e502-e5c3-4cc0-b081-31c072a60704%2Femojione-svg.woff2?1494102761093) format('woff2'),
@@ -21,12 +22,13 @@ body {
 }
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
 .btn, .navbar, .label {
-  font-family: 'alef-digits', 'alef-emoji', sans-serif;
+  font-family: 'alef-digits', 'alef-emoji', sans-serif;  
 }
 .mustache { display: none; }
 .card-modal img {max-height: 16em; }
-.rank-modal img {max-height: 8em; }
+.rank-modal img, .img-qr {max-height: 8em; }
 #hand-row img {max-height: 12em; }
+.navbar-brand img { max-height:1.5em; display: inline }
 /* flex styles based on http://www.bootply.com/oWBElgjtTn */
 html,body {
 	height:100%;
@@ -113,4 +115,27 @@ html,body {
     display: inline-block;
     vertical-align: middle;
     float: none;
+}
+
+/* responsive youtube embeds
+   see https://avexdesigns.com/responsive-youtube-embed/
+*/
+.card-body {
+	position: relative;
+	padding-bottom: 56.25%;
+	padding-top: 30px; height: 0; overflow: hidden;
+}
+
+.card-body iframe,
+.card-body object,
+.card-body embed {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: auto;
+}
+
+.card-body img {
+  width: auto;
 }

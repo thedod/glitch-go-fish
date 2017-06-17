@@ -85,9 +85,9 @@ requirejs([ "mustache", "app/gofish" ],
         }
         var message = game.turn+"'s turn";
         socket.emit(
-          "status", { message: message, game: game });
+          "status", { message: message, game: game, announce_turn: true });
         socket.broadcast.emit(
-          "status", { message: message, game: game });
+          "status", { message: message, game: game, announce_turn: true });
         socket.set_turn_timer();
       }
     };
@@ -392,4 +392,3 @@ requirejs([ "mustache", "app/gofish" ],
   app.use(express.static("public"));
 
 })();
-
